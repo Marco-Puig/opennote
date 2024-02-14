@@ -8,6 +8,9 @@ OpenNote is a contemporary evolution of Flipnote, seamlessly blending the nostal
 
 ## Get Started
 
+### What you will need
+Node.js (LTS Recommended), VSCode, GIT.
+
 ### `npm start`
 
 Runs the app in the development mode.\
