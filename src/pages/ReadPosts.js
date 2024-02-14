@@ -25,7 +25,7 @@ const ReadPosts = (props) => {
             {
                 posts && posts.length > 0 ?
                 posts.map((post,index) => 
-                   <Card id={post.id} title={post.title} author={post.author} description={post.description} likes={post.likes}/>
+                   <Card id={post.id} title={post.title} author={post.author} description={post.description} likes={post.likes} canvas={post.canvas}/>
                 ) : <h2>{''}</h2>
             }
         </div>  

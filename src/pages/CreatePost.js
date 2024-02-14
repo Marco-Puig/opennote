@@ -5,7 +5,7 @@ import { supabase } from '../client'
 
 const CreatePost = () => {
 
-    const [post, setPost] = useState({title: "", author: "", description: ""})
+    const [post, setPost] = useState({title: "", author: "", description: "", canvas: ""})
     const canvasRef = useRef(null);
     let context = null;
 
@@ -24,7 +24,7 @@ const CreatePost = () => {
       
         await supabase
           .from('Posts')
-          .insert({title: post.title, author: post.author, description: post.description})
+          .insert({title: post.title, author: post.author, description: post.description, canvas: canvasRef.current.toDataURL()})
           .select();
       
         window.location = "/";

@@ -36,8 +36,9 @@ const Card = (props) =>  {
           <h2 className="title">{props.title}</h2>
           <h3 className="author">{"by " + props.author}</h3>
           <p className="description">{props.description}</p>
+          <img className="canvas" width = "300" height = "300" src={props.canvas} alt="canvas" style={{backgroundColor: 'white'}}/>
           <button className="likeButton" onClick={updateCount} >👍 Likes: {props.likes + count}</button>
-          
+          <button className="likeButton" onClick={makeFeatured} >⭐ Feature</button>
       </div>
   );
 };
