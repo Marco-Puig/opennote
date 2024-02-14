@@ -15,7 +15,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in browser.
 
 ### `npm test`
 
-Launches unit testing via the interactive watch mode.\
+Launches unit testing via the interactive watch mode.
 
 ### `npm run build`
 
