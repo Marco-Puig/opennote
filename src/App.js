@@ -12,7 +12,6 @@ const App = () => {
 
   const posts = []
  
-
   // Sets up routes
   let element = useRoutes([
     {

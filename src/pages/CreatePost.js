@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './CreatePost.css';
 
 import { supabase } from '../client'
@@ -6,6 +6,8 @@ import { supabase } from '../client'
 const CreatePost = () => {
 
     const [post, setPost] = useState({title: "", author: "", description: ""})
+    const canvasRef = useRef(null);
+    let context = null;
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -26,23 +28,53 @@ const CreatePost = () => {
           .select();
       
         window.location = "/";
-      }
+    }
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        context = canvas.getContext('2d');
+
+        const startDrawing = (event) => {
+            context.beginPath();
+            context.moveTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+        }
+
+        const draw = (event) => {
+            context.lineTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+            context.stroke();
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', () => context.beginPath());
+
+        return () => {
+            canvas.removeEventListener('mousedown', startDrawing);
+            canvas.removeEventListener('mousemove', draw);
+            canvas.removeEventListener('mouseup', () => context.beginPath());
+        }
+    }, []);
 
     return (
         <div>
             <form>
-                <label for="title">Title</label> <br />
+                <label htmlFor="title">Title</label> <br />
                 <input type="text" id="title" name="title" onChange={handleChange} /><br />
                 <br/>
 
-                <label for="author">Author</label><br />
+                <label htmlFor="author">Author</label><br />
                 <input type="text" id="author" name="author" onChange={handleChange} /><br />
                 <br/>
 
-                <label for="description">Description</label><br />
+                <label htmlFor="description">Description</label><br />
                 <textarea rows="5" cols="50" id="description" name="description" onChange={handleChange}>
                 </textarea>
                 <br/>
+
+                <label htmlFor="canvas">Draw</label><br />
+                <canvas ref={canvasRef} id="canvas" name="canvas" width="500" height="500" style={{backgroundColor: 'white'}} />
+                <br/>
+
                 <input type="submit" value="Create" onClick={createPost} />
             </form>
         </div>

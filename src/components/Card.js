@@ -42,6 +42,7 @@ const Card = (props) =>  {
   );
 };
 
+// Allows Admins to feature a post
 // <button className="likeButton" onClick={makeFeatured} >⭐ Feature</button>
 
 export default Card;
