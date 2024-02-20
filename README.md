@@ -12,7 +12,7 @@ https://github.com/Marco-Puig/OpenNote/assets/90495366/8c66d30d-08dc-4695-ae11-6
 ### What you will need:
 Node.js (LTS Recommended), VSCode, GIT.
 
-### `npm start`
+### `npm install`
 Once you have the project download, make sure to install all the needed node packages.
 
 ### `npm start`
