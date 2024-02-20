@@ -4,13 +4,16 @@ OpenNote is a contemporary evolution of Flipnote, seamlessly blending the nostal
 
 ## Overview
 
-### Feburary 14th
+### Feburary 14th 2024
 https://github.com/Marco-Puig/OpenNote/assets/90495366/8c66d30d-08dc-4695-ae11-6a9a930145b5
 
 ## Get Started
 
 ### What you will need:
 Node.js (LTS Recommended), VSCode, GIT.
+
+### `npm start`
+Once you have the project download, make sure to install all the needed node packages.
 
 ### `npm start`
 
