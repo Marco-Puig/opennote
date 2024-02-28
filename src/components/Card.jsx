@@ -32,13 +32,18 @@ const Card = (props) =>  {
 
   return (
       <div className="Card">
-          <Link to={'/community/edit/:id'+ props.id}><img className="moreButton" alt="edit button" src={more} /></Link>
+        
+        <div className="Card-header">
           <h2 className="title">{props.title}</h2>
           <h3 className="author">{"by " + props.author}</h3>
           <p className="description">{props.description}</p>
+        </div>
+        <Link to={'/community/edit/:id'+ props.id}><img className="moreButton" alt="edit button" src={more} /></Link>
           <img className="canvas" width = "300" height = "300" src={props.canvas} alt="canvas" style={{backgroundColor: 'white'}}/>
+        <div className="Button-Area">
           <button className="likeButton" onClick={updateCount} >👍 Likes: {props.likes + count}</button>
           <button className="likeButton" onClick={makeFeatured} >⭐ Feature</button>
+        </div>  
       </div>
   );
 };

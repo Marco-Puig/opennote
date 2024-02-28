@@ -9,11 +9,30 @@
     width: 400px;
     text-align: center;
     background-color: #161616;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-between;
+    
+    
 }
+
+.Card-header{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items:center;
+    padding-left: 10px;
+    padding-right: 10px;
+    justify-content: center;
+}
+
+
+
 
 .title {
     color:white;
-    padding-left:30px;
     font-size: 24px;
 }
 
@@ -24,7 +43,7 @@
 }
 
 .description {
-    color:white;  
+    color:rgb(255, 255, 255);  
     text-align: justify;
     text-justify: inter-word;
     padding-left: 30px;
@@ -44,7 +63,15 @@
     color:white;
     cursor: pointer;
     transition: border-color 0.25s;
+    transition: 0.3s ease-in-out;
 }
+
+.likeButton:hover{
+    transform: scale(1.2);
+}
+
+
+
 .betButton:hover {
     border-color: #646cff;
   }
