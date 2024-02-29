@@ -32,27 +32,47 @@ const CreatePost = () => {
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        context = canvas.getContext('2d');
-
+        const context = canvas.getContext('2d');
+    
+        let isDrawing = false;
+    
         const startDrawing = (event) => {
-            context.beginPath();
-            context.moveTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
-        }
-
+            if (event.button === 0) {
+                isDrawing = true;
+                const rect = canvas.getBoundingClientRect();
+                const offsetX = event.clientX - rect.left;
+                const offsetY = event.clientY - rect.top;
+                context.beginPath();
+                context.moveTo(offsetX, offsetY);
+            }
+        };
+    
         const draw = (event) => {
-            context.lineTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
-            context.stroke();
-        }
-
+            if (isDrawing) {
+                const rect = canvas.getBoundingClientRect();
+                const offsetX = event.clientX - rect.left;
+                const offsetY = event.clientY - rect.top;
+                context.lineTo(offsetX, offsetY);
+                context.stroke();
+            }
+        };
+    
+        const stopDrawing = () => {
+            if (isDrawing) {
+                isDrawing = false;
+                context.beginPath();
+            }
+        };
+    
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', () => context.beginPath());
-
+        canvas.addEventListener('mouseup', stopDrawing);
+    
         return () => {
             canvas.removeEventListener('mousedown', startDrawing);
             canvas.removeEventListener('mousemove', draw);
-            canvas.removeEventListener('mouseup', () => context.beginPath());
-        }
+            canvas.removeEventListener('mouseup', stopDrawing);
+        };
     }, []);
 
     return (
