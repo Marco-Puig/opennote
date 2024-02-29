@@ -7,7 +7,6 @@ const CreatePost = () => {
 
     const [post, setPost] = useState({title: "", author: "", description: "", canvas: ""})
     const canvasRef = useRef(null);
-    let context = null;
 
     const handleChange = (event) => {
         const {name, value} = event.target;

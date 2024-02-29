@@ -15,6 +15,7 @@ const ReadFeatures = (props) => {
         const { data } = await supabase
         .from('Posts')
         .select('*')
+        .order('created_at', { ascending: false })
         .filter('featured', 'eq', true);
       
       setPosts(data);

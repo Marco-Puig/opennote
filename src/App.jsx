@@ -15,6 +15,10 @@ const App = () => {
   // Sets up routes
   let element = useRoutes([
     {
+      path:"/",
+      element: <ReadFeatures />
+    },
+    {
       path: "/community",
       element:<ReadPosts data={posts}/>
     },
@@ -25,10 +29,6 @@ const App = () => {
     {
       path:"/new",
       element: <CreatePost />
-    },
-    {
-      path:"/",
-      element: <ReadFeatures />
     }
   ]);
 
