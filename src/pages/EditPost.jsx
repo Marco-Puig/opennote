@@ -98,8 +98,8 @@ const EditPost = ({data}) => {
                 <input type="text" id="author" name="author" value={post.author} onChange={handleChange} /><br />
                 <br/>
 
-                <label for="description">Description</label><br />
-                <textarea rows="5" cols="50" id="description" value={post.description} onChange={handleChange} >
+                <label htmlFor="description">Description</label><br />
+                <textarea rows="5" cols="50" id="description" name="description" onChange={handleChange}>
                 </textarea>
                 <br/>
 
