@@ -36,13 +36,23 @@ const CreatePost = () => {
         let isDrawing = false;
     
         const startDrawing = (event) => {
-            if (event.button === 0) {
-                isDrawing = true;
-                const rect = canvas.getBoundingClientRect();
-                const offsetX = event.clientX - rect.left;
-                const offsetY = event.clientY - rect.top;
-                context.beginPath();
-                context.moveTo(offsetX, offsetY);
+            // Prevent the right-click menu from opening
+            if (event.button === 2) {
+                event.preventDefault();
+            }
+    
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const offsetX = event.clientX - rect.left;
+            const offsetY = event.clientY - rect.top;
+            context.beginPath();
+            context.moveTo(offsetX, offsetY);
+    
+            // Set stroke color based on mouse button
+            if (event.button === 2) { // Right mouse button
+                context.strokeStyle = 'white'; // Set color to white for right-click
+            } else if (event.button === 0) { // Left mouse button
+                context.strokeStyle = 'black'; // Keep or set color to black for left-click
             }
         };
     
@@ -59,20 +69,23 @@ const CreatePost = () => {
         const stopDrawing = () => {
             if (isDrawing) {
                 isDrawing = false;
-                context.beginPath();
+                context.beginPath(); // Start a new path to prevent drawing a line on next mousedown
             }
         };
     
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('contextmenu', event => event.preventDefault()); // Prevent the default context menu
     
         return () => {
             canvas.removeEventListener('mousedown', startDrawing);
             canvas.removeEventListener('mousemove', draw);
             canvas.removeEventListener('mouseup', stopDrawing);
+            canvas.removeEventListener('contextmenu', event => event.preventDefault());
         };
     }, []);
+    
 
     return (
         <div>
