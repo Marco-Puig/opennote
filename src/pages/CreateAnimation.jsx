@@ -89,14 +89,6 @@ const createPost = async (event) => {
         }
 
         // Get the public URL of the uploaded file
-        /*const { publicURL, error: urlError } = supabase.storage
-            .from('animations')
-            .getPublicUrl(fileName); 
-            if (urlError) {
-            throw urlError;
-        }
-            */
-
         const publicURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/animations/${fileName}`;
 
         setShowGifPreview(false); // Hide the GIF preview after creating the post
@@ -108,7 +100,7 @@ const createPost = async (event) => {
                 title: post.title, 
                 author: post.author, 
                 description: post.description, 
-                canvas: publicURL // Save the public URL to the database
+                canvas: publicURL // Save the public URL to the database for later retrieval
             });
 
         window.location = "/";
