@@ -10,6 +10,7 @@ const CreateAnimation = () => {
     const canvasRefs = useRef([]);
 
     const [gifUrl, setGifUrl] = useState('');
+    const [showGifPreview, setShowGifPreview] = useState(false);
 
     window.Buffer = Buffer;
 
@@ -26,59 +27,77 @@ const CreateAnimation = () => {
         }));
     };
 
-    const createGIF = async () => {
-        if (post.canvases.length === 0) {
-            alert("Please add at least one frame.");
-            return;
-        }
-    
-        const width = 500;
-        const height = 500;
-    
-        const gif = new GifEncoder(width, height);
-        gif.setDelay(500); // Adjust delay as needed
-        gif.start();
-    
-        for (const canvas of canvasRefs.current) {
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    
-                // Change transparent background to white
-                for (let i = 0; i < imageData.data.length; i += 4) {
-                    if (imageData.data[i + 3] === 0) { // If pixel is fully transparent
-                        imageData.data[i] = 255;     // Set red component to 255
-                        imageData.data[i + 1] = 255; // Set green component to 255
-                        imageData.data[i + 2] = 255; // Set blue component to 255
-                        imageData.data[i + 3] = 255; // Make pixel fully opaque
-                    }
-                }
-    
-                // Put the modified imageData back to the canvas
-                ctx.putImageData(imageData, 0, 0);
-    
-                // Add frame to GIF
-                gif.addFrame(ctx);
+    const createGIF = () => {
+        return new Promise(async (resolve, reject) => {
+            if (post.canvases.length === 0) {
+                alert("Please add at least one frame.");
+                reject("No frames added.");
+                return;
             }
-        }
     
-        gif.finish();
+            const width = 500;
+            const height = 500;
     
-        // Create a blob from the GIF data
-        const blob = new Blob([gif.out.getData()], { type: 'image/gif' });
-        
-        // Create a URL for the blob
-        const url = URL.createObjectURL(blob);
-        
-        // Set the display for the GIF
-        console.log('GIF created successfully. URL:', url);
-        setGifUrl(url);
+            const gif = new GifEncoder(width, height);
+            gif.setDelay(500); // Adjust delay as needed
+            gif.start();
+    
+            for (const canvas of canvasRefs.current) {
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    
+                    // Change transparent background to white
+                    for (let i = 0; i < imageData.data.length; i += 4) {
+                        if (imageData.data[i + 3] === 0) {
+                            imageData.data[i] = 255;
+                            imageData.data[i + 1] = 255;
+                            imageData.data[i + 2] = 255;
+                            imageData.data[i + 3] = 255;
+                        }
+                    }
+    
+                    ctx.putImageData(imageData, 0, 0);
+                    gif.addFrame(ctx);
+                }
+            }
+    
+            gif.finish();
+    
+            const blob = new Blob([gif.out.getData()], { type: 'image/gif' });
+            const url = URL.createObjectURL(blob);
+            console.log('GIF created successfully. URL:', url);
+    
+            // Set the gifUrl state and resolve the promise
+            setGifUrl(url);
+            setShowGifPreview(true); // Indicate that the GIF preview should be shown
+            resolve(url); // Resolve with the URL for potential use
+        });
     };
     
     const createPost = async (event) => {
         event.preventDefault();
-        createGIF();
-    };
+    
+        try {
+            const gifUrl = await createGIF(); // Wait for the GIF creation to finish
+
+            setShowGifPreview(false); // Hide the GIF preview after creating the post
+    
+            await supabase
+                .from('Posts')
+                .insert({
+                    title: post.title, 
+                    author: post.author, 
+                    description: post.description, 
+                    canvas: gifUrl // Save the GIF URL to the database
+                })
+                .select();
+            
+            window.location = "/";
+        } catch (error) {
+            console.error("Failed to create GIF or post:", error);
+        }
+    };    
 
     const addCanvas = () => {
         setPost((prev) => ({
@@ -195,18 +214,13 @@ const CreateAnimation = () => {
                 
                 <div>
             <div>
-            {/* Button to trigger GIF creation */}
-            <button onClick={createGIF}>Preview Animation</button>                
+            <button onClick={createGIF} type="button">Preview Animation</button>                
             </div>
-
-            
-            {/* Display the GIF if the URL is set */}
-            {gifUrl && <img src={gifUrl} alt="Generated GIF" style={{backgroundColor : 'white'}}/>}
-        </div>
-        <div className="form-group">
+            {gifUrl && showGifPreview && <img src={gifUrl} alt="Generated GIF" style={{backgroundColor : 'white'}}/>}
+            </div>
+                <div className="form-group">
                     <input type="submit" value="Create Animation" />
                 </div>
-
             </form>
         </div>
     );
