@@ -80,7 +80,7 @@ const createPost = async (event) => {
 
         // Upload the blob to Supabase Storage
         const fileName = `gifs_${Date.now()}-post.gif`; // Unique file name
-        const { data, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
             .from('animations')
             .upload(fileName, blob);
 
