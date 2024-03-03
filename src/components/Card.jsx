@@ -39,7 +39,9 @@ const Card = (props) =>  {
           <p className="description">{props.description}</p>
         </div>
         <Link to={'/community/edit/:id'+ props.id}><img className="moreButton" alt="edit button" src={more} /></Link>
-          <img className="canvas" width = "300" height = "300" src={props.canvas} alt="canvas" style={{backgroundColor: 'white'}}/>
+        <a href={props.canvas} target="_blank" rel="noopener noreferrer">
+          <img className="canvas" width = "350" height = "350" src={props.canvas} alt="canvas" style={{backgroundColor: 'white'}}/>
+        </a>
         <div className="Button-Area">
           <button className="likeButton" onClick={updateCount} >👍 Likes: {props.likes + count}</button>
           <button className="likeButton" onClick={makeFeatured} >⭐ Feature</button>

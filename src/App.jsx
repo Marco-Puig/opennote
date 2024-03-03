@@ -49,7 +49,7 @@ const App = () => {
           <Link to="/community"><button className="headerBtn"> Community 🌐 </button></Link>
           <Link to="/new"><button className="headerBtn"> Create Post ✍️ </button></Link>
           <Link to="/animate"><button className="headerBtn"> Create Animation 📙 </button></Link>
-          <a href="https://www.patreon.com/bgnb"><button className="headerBtn"> Support Us ❤️</button></a></div>
+          <a href="https://ko-fi.com/marcopuig"><button className="headerBtn"> Support Us ❤️</button></a></div>
       </div>
         {element}
     </div>

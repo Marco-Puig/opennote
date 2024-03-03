@@ -1,86 +1,79 @@
 .Card {
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(4px);
     border: 1px solid rgba(153, 153, 153, 0.497);
     border-radius: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-right: 10px;
+    padding: 20px;
     margin-bottom: 25px;
-    width: 400px;
+    width: 500px;
     text-align: center;
-    background-color: #161616;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: space-between;
-    
-    
-}
-
-.Card-header{
+    background: linear-gradient(145deg, #1c1e24, #16181d);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #fff;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    width: 100%;
-    align-items:center;
-    padding-left: 10px;
-    padding-right: 10px;
-    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
 }
 
+.Card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
 
-
+.Card-header {
+    margin-bottom: 20px;
+}
 
 .title {
-    color:white;
     font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .author {
-    color:white;
-    margin-bottom: 20px;
-    font-size: 20px;
+    font-size: 18px;
+    color: #a0a5ab;
+    margin-bottom: 15px;
 }
 
 .description {
-    color:rgb(255, 255, 255);  
-    text-align: justify;
-    text-justify: inter-word;
-    padding-left: 30px;
-    padding-right: 30px;
-    margin-bottom: 20px;
     font-size: 15px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 25px;
 }
 
-.likeButton {
+.likeButton, .betButton {
     border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #2b2a2a;
     border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 15px;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
-    color:white;
-    cursor: pointer;
-    transition: border-color 0.25s;
-    transition: 0.3s ease-in-out;
+    margin: 5px;
+    transition: all 0.3s ease;
+    align-self: stretch;
+    margin-top: 20px;
 }
 
-.likeButton:hover{
-    transform: scale(1.2);
-}
-
-
-
-.betButton:hover {
+.likeButton:hover, .betButton:hover {
+    background-color: #4a4e57;
+    color: #ffffff;
     border-color: #646cff;
+    transform: scale(1.05);
+}
+
+.likeButton:active, .betButton:active{
+    background-color: #bfc216;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
   }
 
 .moreButton {
     width: 30px;
-    float:right;
-
+    align-self:left;
+    margin-bottom: 20px;
 }
+
 .moreButton:hover {
-    cursor: pointer;
+    transform: scale(1.2);
 }

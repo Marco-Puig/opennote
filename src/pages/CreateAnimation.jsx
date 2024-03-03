@@ -67,6 +67,7 @@ const createGIF = () => {
         const blob = new Blob([gif.out.getData()], { type: 'image/gif' });
         const url = URL.createObjectURL(blob);
         setGifUrl(url);
+        setShowGifPreview(!showGifPreview); // Show the GIF preview after creating the GIF
         resolve(blob); // Resolve with the blob for uploading
         return blob;
     });
@@ -77,7 +78,8 @@ const createPost = async (event) => {
 
     try {
         const blob = await createGIF(); // Wait for the GIF creation to finish
-
+        setShowGifPreview(false); // Hide the GIF preview after creating the post
+        
         // Upload the blob to Supabase Storage
         const fileName = `gifs_${Date.now()}-post.gif`; // Unique file name
         const { error: uploadError } = await supabase.storage
@@ -91,7 +93,7 @@ const createPost = async (event) => {
         // Get the public URL of the uploaded file
         const publicURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/animations/${fileName}`;
 
-        setShowGifPreview(false); // Hide the GIF preview after creating the post
+
 
         // Save the post details along with the public URL of the GIF in the database
         await supabase
