@@ -27,77 +27,95 @@ const CreateAnimation = () => {
         }));
     };
 
-    const createGIF = () => {
-        return new Promise(async (resolve, reject) => {
-            if (post.canvases.length === 0) {
-                alert("Please add at least one frame.");
-                reject("No frames added.");
-                return;
-            }
-    
-            const width = 500;
-            const height = 500;
-    
-            const gif = new GifEncoder(width, height);
-            gif.setDelay(500); // Adjust delay as needed
-            gif.start();
-    
-            for (const canvas of canvasRefs.current) {
-                if (canvas) {
-                    const ctx = canvas.getContext('2d');
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    
-                    // Change transparent background to white
-                    for (let i = 0; i < imageData.data.length; i += 4) {
-                        if (imageData.data[i + 3] === 0) {
-                            imageData.data[i] = 255;
-                            imageData.data[i + 1] = 255;
-                            imageData.data[i + 2] = 255;
-                            imageData.data[i + 3] = 255;
-                        }
-                    }
-    
-                    ctx.putImageData(imageData, 0, 0);
-                    gif.addFrame(ctx);
-                }
-            }
-    
-            gif.finish();
-    
-            const blob = new Blob([gif.out.getData()], { type: 'image/gif' });
-            const url = URL.createObjectURL(blob);
-            console.log('GIF created successfully. URL:', url);
-    
-            // Set the gifUrl state and resolve the promise
-            setGifUrl(url);
-            setShowGifPreview(true); // Indicate that the GIF preview should be shown
-            resolve(url); // Resolve with the URL for potential use
-        });
-    };
-    
-    const createPost = async (event) => {
-        event.preventDefault();
-    
-        try {
-            const gifUrl = await createGIF(); // Wait for the GIF creation to finish
-
-            setShowGifPreview(false); // Hide the GIF preview after creating the post
-    
-            await supabase
-                .from('Posts')
-                .insert({
-                    title: post.title, 
-                    author: post.author, 
-                    description: post.description, 
-                    canvas: gifUrl // Save the GIF URL to the database
-                })
-                .select();
-            
-            window.location = "/";
-        } catch (error) {
-            console.error("Failed to create GIF or post:", error);
+const createGIF = () => {
+    return new Promise(async (resolve, reject) => {
+        if (post.canvases.length === 0) {
+            alert("Please add at least one frame.");
+            reject("No frames added.");
+            return;
         }
-    };    
+
+        const width = 500;
+        const height = 500;
+
+        const gif = new GifEncoder(width, height);
+        gif.setDelay(500); // Adjust delay as needed
+        gif.start();
+
+        for (const canvas of canvasRefs.current) {
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                // Change transparent background to white
+                for (let i = 0; i < imageData.data.length; i += 4) {
+                    if (imageData.data[i + 3] === 0) {
+                        imageData.data[i] = 255;
+                        imageData.data[i + 1] = 255;
+                        imageData.data[i + 2] = 255;
+                        imageData.data[i + 3] = 255;
+                    }
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+                gif.addFrame(ctx);
+            }
+        }
+
+        gif.finish();
+
+        const blob = new Blob([gif.out.getData()], { type: 'image/gif' });
+        const url = URL.createObjectURL(blob);
+        setGifUrl(url);
+        resolve(blob); // Resolve with the blob for uploading
+        return blob;
+    });
+};
+
+const createPost = async (event) => {
+    event.preventDefault();
+
+    try {
+        const blob = await createGIF(); // Wait for the GIF creation to finish
+
+        // Upload the blob to Supabase Storage
+        const fileName = `gifs_${Date.now()}-post.gif`; // Unique file name
+        const { data, error: uploadError } = await supabase.storage
+            .from('animations')
+            .upload(fileName, blob);
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        // Get the public URL of the uploaded file
+        /*const { publicURL, error: urlError } = supabase.storage
+            .from('animations')
+            .getPublicUrl(fileName); 
+            if (urlError) {
+            throw urlError;
+        }
+            */
+
+        const publicURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/animations/${fileName}`;
+
+        setShowGifPreview(false); // Hide the GIF preview after creating the post
+
+        // Save the post details along with the public URL of the GIF in the database
+        await supabase
+            .from('Posts')
+            .insert({
+                title: post.title, 
+                author: post.author, 
+                description: post.description, 
+                canvas: publicURL // Save the public URL to the database
+            });
+
+        window.location = "/";
+    } catch (error) {
+        console.error("Failed to create GIF or post:", error);
+    }
+};
 
     const addCanvas = () => {
         setPost((prev) => ({
