@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import './CreatePost.css';
+import './CreateAnimation.css';
 import GifEncoder from 'gif-encoder-2';
 import { supabase } from '../client';
 import { Buffer } from 'buffer';
@@ -48,7 +48,7 @@ const copyCanvas = () => {
     }
 
     const currentCanvas = canvasRefs.current[post.canvases.length - 1].getContext('2d');
-    const previousCanvas = canvasRefs.current[post.canvases.length - 2].getContext('2d').getImageData(0, 0, 500, 500);
+    const previousCanvas = canvasRefs.current[post.canvases.length - 2].getContext('2d').getImageData(0, 0, 600, 525);
 
     currentCanvas.putImageData(previousCanvas, 0, 0);
 
@@ -62,8 +62,8 @@ const createGIF = () => {
             return;
         }
 
-        const width = 500;
-        const height = 500;
+        const width = 600;
+        const height = 525;
 
         const gif = new GifEncoder(width, height);
         gif.setDelay(post.frameDelay); // Adjust delay as needed
@@ -260,8 +260,8 @@ const createPost = async (event) => {
                         <label>Frame: {index + 1}</label><br />
                         <canvas
                             ref={el => canvasRefs.current[index] = el}
-                            width="500"
-                            height="500"
+                            width="600"
+                            height="525"
                             className="animation-canvas"
                             style={{ backgroundColor: 'white', border: '5px solid', borderColor: colors[currentColorIndex] }}
                         />

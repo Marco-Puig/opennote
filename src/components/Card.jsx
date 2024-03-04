@@ -8,18 +8,24 @@ import { supabase } from '../client'
 
 const Card = (props) =>  {
 
+  const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(0)
 
-  const updateCount = async (event) => {
-    event.preventDefault();
-  
+  const toggleLike = async () => {
+    // Toggle the liked state
+    const newLikedState = !liked;
+    setLiked(newLikedState);
+
+    // Calculate the new likes count based on whether the user is liking or unliking
+    const newCount = newLikedState ? count + 1 : count - 1;
+    setCount(newCount);
+
+    // Update the likes in your database
     await supabase
       .from('Posts')
-      .update({ likes : props.likes + count + 1})
-      .eq('id', props.id)
-  
-    setCount((count) => count + 1);
-  }
+      .update({ likes: props.likes + newCount })
+      .eq('id', props.id);
+  };
 
   const makeFeatured = async (event) => {
     event.preventDefault();
@@ -46,10 +52,12 @@ const Card = (props) =>  {
         </div>
         
         <a href={props.canvas} target="_blank" rel="noopener noreferrer">
-          <img className="canvas" width = "350" height = "350" src={props.canvas} alt="canvas" style={{backgroundColor: 'white'}}/>
+          <img className="canvas" width = "400" height = "350" src={props.canvas} alt="canvas" style={{backgroundColor: 'white'}}/>
         </a>
         <div className="Button-Area">
-          <button className="likeButton" onClick={updateCount} >👍 Likes: {props.likes + count}</button>
+        <button className="likeButton" onClick={toggleLike} >
+          👍 Likes: {props.likes + count}
+        </button>
           <button className="likeButton" onClick={makeFeatured} >⭐ Feature</button>
         </div>  
       </div>
