@@ -34,11 +34,16 @@ const Card = (props) =>  {
       <div className="Card">
         
         <div className="Card-header">
-          <h2 className="title">{props.title}</h2>
-          <h3 className="author">{"by " + props.author}</h3>
-          <p className="description">{props.description}</p>
+        <div className="Header-edit-button">
+            <Link to={'/community/edit/:id'+ props.id}><img className="moreButton" alt="edit button" src={more} /></Link>
+            </div>
+          <div className="Card-header-content">
+            <h2 className="title">{props.title}</h2>
+            <h3 className="author">{"by " + props.author}</h3>
+            <p className="description">{props.description}</p>
+          </div>
         </div>
-        <Link to={'/community/edit/:id'+ props.id}><img className="moreButton" alt="edit button" src={more} /></Link>
+        
         <a href={props.canvas} target="_blank" rel="noopener noreferrer">
           <img className="canvas" width = "350" height = "350" src={props.canvas} alt="canvas" style={{backgroundColor: 'white'}}/>
         </a>
