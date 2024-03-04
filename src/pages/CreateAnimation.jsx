@@ -6,7 +6,7 @@ import { Buffer } from 'buffer';
 
 
 const CreateAnimation = () => {
-    const [post, setPost] = useState({ title: "", author: "", description: "", canvases: [] });
+    const [post, setPost] = useState({ title: "", author: "", description: "", canvases: [], frameDelay: 500 });
     const canvasRefs = useRef([]);
 
     const [gifUrl, setGifUrl] = useState('');
@@ -21,11 +21,23 @@ const CreateAnimation = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setPost((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+
+        // Special handling for frameDelay to ensure it is stored as an integer
+        if (name === 'frameDelay') {
+            const intValue = parseInt(value, 10);
+            setPost((prev) => ({
+                ...prev,
+                [name]: isNaN(intValue) ? 100 : intValue, // Use default value if conversion fails
+            }));
+        } else {
+            // Handle all other fields normally
+            setPost((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
     };
+
 
 const copyCanvas = () => {
 
@@ -53,7 +65,7 @@ const createGIF = () => {
         const height = 500;
 
         const gif = new GifEncoder(width, height);
-        gif.setDelay(500); // Adjust delay as needed
+        gif.setDelay(post.frameDelay); // Adjust delay as needed
         gif.start();
 
         for (const canvas of canvasRefs.current) {
@@ -106,8 +118,6 @@ const createPost = async (event) => {
 
         // Get the public URL of the uploaded file
         const publicURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/animations/${fileName}`;
-
-
 
         // Save the post details along with the public URL of the GIF in the database
         await supabase
@@ -216,6 +226,19 @@ const createPost = async (event) => {
                     <label htmlFor="description">Description</label><br />
                     <textarea id="description" name="description" rows="5" cols="50" value={post.description} onChange={handleChange} />
                 </div>
+
+                <div className="form-group">
+                    <label htmlFor="frameDelay">Frame Delay</label><br />
+                    <textarea
+                        id="frameDelay"
+                        name="frameDelay"
+                        rows="1"
+                        cols="1"
+                        value={post.frameDelay.toString()} // Convert the integer frameDelay back to a string for the textarea
+                        onChange={handleChange}
+                    />
+                </div>
+
 
                 {post.canvases.map((_, index) => (
                     <div key={index} className="canvas-container">

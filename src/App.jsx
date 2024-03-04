@@ -45,7 +45,8 @@ const App = () => {
       <div className="header">
         <h1>OpenNote 📝</h1>
         <div className="nav_links">
-          <Link to="/"><button className="headerBtn"> Featured ⭐ </button></Link>
+          <Link to="/"><button className="headerBtn"> Featured ⭐</button></Link>
+          <Link to="/"><button className="headerBtn"> Trending 📈 </button></Link>
           <Link to="/community"><button className="headerBtn"> Community 🌐 </button></Link>
           <Link to="/new"><button className="headerBtn"> Create Post ✍️ </button></Link>
           <Link to="/animate"><button className="headerBtn"> Create Animation 📙 </button></Link>

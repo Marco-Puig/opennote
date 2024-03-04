@@ -40,6 +40,7 @@ const Card = (props) =>  {
           <div className="Card-header-content">
             <h2 className="title">{props.title}</h2>
             <h3 className="author">{"by " + props.author}</h3>
+            <h3 className="author">{"Posted: " + props.date.slice(0, 10)}</h3>
             <p className="description">{props.description}</p>
           </div>
         </div>
