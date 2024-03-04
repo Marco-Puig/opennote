@@ -8,6 +8,7 @@ import { Buffer } from 'buffer';
 const CreateAnimation = () => {
     const [post, setPost] = useState({ title: "", author: "", description: "", canvases: [], frameDelay: 500 });
     const canvasRefs = useRef([]);
+    const [currentColorIndex, setCurrentColorIndex] = useState(0); // Index to keep track of the current color
 
     const [gifUrl, setGifUrl] = useState('');
     const [showGifPreview, setShowGifPreview] = useState(false);
@@ -27,7 +28,7 @@ const CreateAnimation = () => {
             const intValue = parseInt(value, 10);
             setPost((prev) => ({
                 ...prev,
-                [name]: isNaN(intValue) ? 100 : intValue, // Use default value if conversion fails
+                [name]: isNaN(intValue) ? 500 : intValue, // Use default value if conversion fails
             }));
         } else {
             // Handle all other fields normally
@@ -149,7 +150,8 @@ const createPost = async (event) => {
         }));
     };
 
-    // Handle drawing on canvases
+    const colors = ['black', 'red', 'blue', 'green', 'yellow']; // Array of colors to cycle through
+
     useEffect(() => {
         post.canvases.forEach((_, index) => {
             const canvas = canvasRefs.current[index];
@@ -170,10 +172,12 @@ const createPost = async (event) => {
                     context.beginPath();
                     context.moveTo(offsetX, offsetY);
     
-                    if (event.button === 2) {
+                    // Brush Color
+                    if (event.button === 0) {
+                        context.strokeStyle = colors[currentColorIndex];
+                    } else if (event.button === 2) {
+                    // Eraser
                         context.strokeStyle = 'white';
-                    } else if (event.button === 0) {
-                        context.strokeStyle = 'black';
                     }
                 };
     
@@ -193,21 +197,32 @@ const createPost = async (event) => {
                         context.beginPath();
                     }
                 };
+
+                        // Arrow keys to change color
+                const handleKeyDown = (event) => {
+                    if (event.key === 'ArrowRight') {
+                        setCurrentColorIndex((prevIndex) => (prevIndex + 1) % colors.length); // Cycle forward through colors
+                    } else if (event.key === 'ArrowLeft') {
+                        setCurrentColorIndex((prevIndex) => (prevIndex - 1 + colors.length) % colors.length); // Cycle backward through colors
+                    }
+                };
     
                 canvas.addEventListener('mousedown', startDrawing);
                 canvas.addEventListener('mousemove', draw);
                 canvas.addEventListener('mouseup', stopDrawing);
-                canvas.addEventListener('contextmenu', (event) => event.preventDefault());
-    
+                canvas.addEventListener('contextmenu', event => event.preventDefault()); // Prevent the default context menu
+                window.addEventListener('keydown', handleKeyDown); // Listen for keydown events on the window
+            
                 return () => {
                     canvas.removeEventListener('mousedown', startDrawing);
                     canvas.removeEventListener('mousemove', draw);
                     canvas.removeEventListener('mouseup', stopDrawing);
-                    canvas.removeEventListener('contextmenu', (event) => event.preventDefault());
+                    canvas.removeEventListener('contextmenu', event => event.preventDefault());
+                    window.removeEventListener('keydown', handleKeyDown); // Clean up the event listener
                 };
             }
         });
-    }, [post.canvases]);
+    }, [post.canvases, currentColorIndex, colors]); // Add currentColorIndex and colors to the dependency array
 
     return (
         <div className="create-animation">
@@ -248,12 +263,11 @@ const createPost = async (event) => {
                             width="500"
                             height="500"
                             className="animation-canvas"
-                            style={{ backgroundColor: 'white', border: '1px solid #000' }}
+                            style={{ backgroundColor: 'white', border: '5px solid', borderColor: colors[currentColorIndex] }}
                         />
                         <br />
                     </div>
                 ))}
-
                 <div className="button-group">
                     <button type="button" onClick={addCanvas}>Add Frame</button>
                     {post.canvases.length > 1 && (

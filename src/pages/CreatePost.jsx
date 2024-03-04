@@ -7,6 +7,7 @@ const CreatePost = () => {
 
     const [post, setPost] = useState({title: "", author: "", description: "", canvas: ""})
     const canvasRef = useRef(null);
+    const [currentColorIndex, setCurrentColorIndex] = useState(0); // Index to keep track of the current color
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -28,34 +29,37 @@ const CreatePost = () => {
       
         window.location = "/";
     }
+    
+    const colors = ['black', 'red', 'blue', 'green', 'yellow']; // Array of colors to cycle through
 
     useEffect(() => {
+        
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-    
+
         let isDrawing = false;
-    
+
         const startDrawing = (event) => {
-            // Prevent the right-click menu from opening
             if (event.button === 2) {
-                event.preventDefault();
+                event.preventDefault(); // Prevent the right-click menu from opening
             }
-    
+
             isDrawing = true;
             const rect = canvas.getBoundingClientRect();
             const offsetX = event.clientX - rect.left;
             const offsetY = event.clientY - rect.top;
             context.beginPath();
             context.moveTo(offsetX, offsetY);
-    
-            // Set stroke color based on mouse button
-            if (event.button === 2) { // Right mouse button
-                context.strokeStyle = 'white'; // Set color to white for right-click
-            } else if (event.button === 0) { // Left mouse button
-                context.strokeStyle = 'black'; // Keep or set color to black for left-click
+
+            // Brush Color
+            if (event.button === 0) {
+                context.strokeStyle = colors[currentColorIndex];
+            } else if (event.button === 2) {
+            // Eraser
+                context.strokeStyle = 'white';
             }
         };
-    
+
         const draw = (event) => {
             if (isDrawing) {
                 const rect = canvas.getBoundingClientRect();
@@ -65,27 +69,38 @@ const CreatePost = () => {
                 context.stroke();
             }
         };
-    
+
         const stopDrawing = () => {
             if (isDrawing) {
                 isDrawing = false;
                 context.beginPath(); // Start a new path to prevent drawing a line on next mousedown
             }
         };
-    
+
+        // Arrow keys to change color
+        const handleKeyDown = (event) => {
+            if (event.key === 'ArrowRight') {
+                setCurrentColorIndex((prevIndex) => (prevIndex + 1) % colors.length); // Cycle forward through colors
+            } else if (event.key === 'ArrowLeft') {
+                setCurrentColorIndex((prevIndex) => (prevIndex - 1 + colors.length) % colors.length); // Cycle backward through colors
+            }
+        };
+
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('contextmenu', event => event.preventDefault()); // Prevent the default context menu
-    
+        window.addEventListener('keydown', handleKeyDown); // Listen for keydown events on the window
+
         return () => {
             canvas.removeEventListener('mousedown', startDrawing);
             canvas.removeEventListener('mousemove', draw);
             canvas.removeEventListener('mouseup', stopDrawing);
             canvas.removeEventListener('contextmenu', event => event.preventDefault());
+            window.removeEventListener('keydown', handleKeyDown); // Clean up the event listener
         };
-    }, []);
-    
+    }, [currentColorIndex, colors]); // Add currentColorIndex and colors to the dependency array
+
 
     return (
         <div>
@@ -104,7 +119,7 @@ const CreatePost = () => {
                 <br/>
 
                 <label htmlFor="canvas">Draw</label><br />
-                <canvas ref={canvasRef} id="canvas" name="canvas" width="500" height="500" style={{backgroundColor: 'white'}} />
+                <canvas ref={canvasRef} id="canvas" name="canvas" width="500" height="500" style={{backgroundColor: 'white',  border: '5px solid', borderColor: colors[currentColorIndex] }} />
                 <br/>
 
                 <input type="submit" value="Create" onClick={createPost} />
