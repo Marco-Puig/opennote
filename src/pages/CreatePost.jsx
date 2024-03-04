@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './CreatePost.css';
 
 import { supabase } from '../client'
@@ -30,7 +30,7 @@ const CreatePost = () => {
         window.location = "/";
     }
     
-    const colors = ['black', 'red', 'blue', 'green', 'yellow']; // Array of colors to cycle through
+    const colors = useMemo(() => ['black', 'red', 'blue', 'green', 'yellow'], []); // Array of colors to cycle through
 
     useEffect(() => {
         

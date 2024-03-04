@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './CreatePost.css';
 import GifEncoder from 'gif-encoder-2';
 import { supabase } from '../client';
@@ -150,7 +150,7 @@ const createPost = async (event) => {
         }));
     };
 
-    const colors = ['black', 'red', 'blue', 'green', 'yellow']; // Array of colors to cycle through
+    const colors = useMemo(() => ['black', 'red', 'blue', 'green', 'yellow'], []); // Array of colors to cycle through
 
     useEffect(() => {
         post.canvases.forEach((_, index) => {
