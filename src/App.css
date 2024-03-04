@@ -47,6 +47,7 @@ button {
   color:rgb(255, 251, 251);
   cursor: pointer;
   transition: all 0.5s ease;
+  margin: 5px;
 }
 
 button:hover {

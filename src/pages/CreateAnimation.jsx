@@ -27,6 +27,20 @@ const CreateAnimation = () => {
         }));
     };
 
+const duplicateCanvas = () => {
+
+    if (post.canvases.length <= 1) {
+        alert("Please add at least one prior frame for reference.");
+        return;
+    }
+
+    const currentCanvas = canvasRefs.current[post.canvases.length - 1].getContext('2d');
+    const previousCanvas = canvasRefs.current[post.canvases.length - 2].getContext('2d').getImageData(0, 0, 500, 500);
+
+    currentCanvas.putImageData(previousCanvas, 0, 0);
+
+};
+
 const createGIF = () => {
     return new Promise(async (resolve, reject) => {
         if (post.canvases.length === 0) {
@@ -79,7 +93,7 @@ const createPost = async (event) => {
     try {
         const blob = await createGIF(); // Wait for the GIF creation to finish
         setShowGifPreview(false); // Hide the GIF preview after creating the post
-        
+
         // Upload the blob to Supabase Storage
         const fileName = `gifs_${Date.now()}-post.gif`; // Unique file name
         const { error: uploadError } = await supabase.storage
@@ -223,10 +237,10 @@ const createPost = async (event) => {
                         <button type="button" onClick={removeCanvas}>Remove Frame</button>
                     )}
                 </div>
-                
+                <button onClick={duplicateCanvas} type="button">Duplicate Previous Frame</button>
                 <div>
             <div>
-            <button onClick={createGIF} type="button">Preview Animation</button>                
+            <button onClick={createGIF} type="button">Preview Animation</button>                   
             </div>
             {gifUrl && showGifPreview && <img src={gifUrl} alt="Generated GIF" style={{backgroundColor : 'white'}}/>}
             </div>
