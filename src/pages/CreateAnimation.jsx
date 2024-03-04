@@ -27,7 +27,7 @@ const CreateAnimation = () => {
         }));
     };
 
-const duplicateCanvas = () => {
+const copyCanvas = () => {
 
     if (post.canvases.length <= 1) {
         alert("Please add at least one prior frame for reference.");
@@ -237,7 +237,7 @@ const createPost = async (event) => {
                         <button type="button" onClick={removeCanvas}>Remove Frame</button>
                     )}
                 </div>
-                <button onClick={duplicateCanvas} type="button">Duplicate Previous Frame</button>
+                <button onClick={copyCanvas} type="button">Copy Previous Frame</button>
                 <div>
             <div>
             <button onClick={createGIF} type="button">Preview Animation</button>                   
