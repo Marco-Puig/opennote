@@ -17,7 +17,7 @@ const App = () => {
       element: <ReadFeatures />,
     },
     {
-      path: "/OpenNote/",
+      path: "/OpenNote",
       element: <ReadFeatures />,
     },
     {
