@@ -1,14 +1,17 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './CreateAnimation.css';
 import GifEncoder from 'gif-encoder-2';
 import { supabase } from '../client';
 import { Buffer } from 'buffer';
+import { SketchPicker } from 'react-color';
 
 
 const CreateAnimation = () => {
     const [post, setPost] = useState({ title: "", author: "", description: "", canvases: [], frameDelay: 500 });
     const canvasRefs = useRef([]);
-    const [currentColorIndex, setCurrentColorIndex] = useState(0); // Index to keep track of the current color
+
+    const [currentColor, setCurrentColor] = useState('#000000');
+    const [showColorPick, setShowColorPick] = useState(false);
 
     const [gifUrl, setGifUrl] = useState('');
     const [showGifPreview, setShowGifPreview] = useState(false);
@@ -22,23 +25,21 @@ const CreateAnimation = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-
-        // Special handling for frameDelay to ensure it is stored as an integer
-        if (name === 'frameDelay') {
-            const intValue = parseInt(value, 10);
-            setPost((prev) => ({
-                ...prev,
-                [name]: isNaN(intValue) ? 500 : intValue, // Use default value if conversion fails
-            }));
-        } else {
-            // Handle all other fields normally
-            setPost((prev) => ({
-                ...prev,
-                [name]: value,
-            }));
-        }
+        setPost((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
+    // Function to update frameDelay based on button click
+    const setFrameDelay = async(delay) => {
+        setPost((prev) => ({
+            ...prev,
+            frameDelay: delay,
+        }));
+        
+        await createGIF();
+    };
 
 const copyCanvas = () => {
 
@@ -52,6 +53,16 @@ const copyCanvas = () => {
 
     currentCanvas.putImageData(previousCanvas, 0, 0);
 
+};
+
+const showHideGifPreview = () => {
+
+    if (post.canvases.length <= 1) {
+        alert("Please add at least one prior frame for reference.");
+        return;
+    }
+
+    setShowGifPreview(!showGifPreview);
 };
 
 const createGIF = () => {
@@ -94,7 +105,6 @@ const createGIF = () => {
         const blob = new Blob([gif.out.getData()], { type: 'image/gif' });
         const url = URL.createObjectURL(blob);
         setGifUrl(url);
-        setShowGifPreview(!showGifPreview); // Show the GIF preview after creating the GIF
         resolve(blob); // Resolve with the blob for uploading
         return blob;
     });
@@ -135,7 +145,6 @@ const createPost = async (event) => {
         console.error("Failed to create GIF or post:", error);
     }
 };
-
     const addCanvas = () => {
         setPost((prev) => ({
             ...prev,
@@ -150,34 +159,31 @@ const createPost = async (event) => {
         }));
     };
 
-    const colors = useMemo(() => ['black', 'red', 'blue', 'green', 'yellow'], []); // Array of colors to cycle through
+    const showBrushColors = () => {
+        setShowColorPick(!showColorPick);
+    };
 
     useEffect(() => {
         post.canvases.forEach((_, index) => {
             const canvas = canvasRefs.current[index];
             if (canvas) {
                 const context = canvas.getContext('2d');
-
                 let isDrawing = false;
     
                 const startDrawing = (event) => {
-                    if (event.button === 2) {
-                        event.preventDefault();
-                    }
-    
                     isDrawing = true;
                     const rect = canvas.getBoundingClientRect();
                     const offsetX = event.clientX - rect.left;
                     const offsetY = event.clientY - rect.top;
                     context.beginPath();
                     context.moveTo(offsetX, offsetY);
-    
+                    
                     // Brush Color
                     if (event.button === 0) {
-                        context.strokeStyle = colors[currentColorIndex];
+                        context.strokeStyle = currentColor;
                     } else if (event.button === 2) {
                     // Eraser
-                        context.strokeStyle = 'white';
+                       context.strokeStyle = 'white';
                     }
                 };
     
@@ -197,32 +203,21 @@ const createPost = async (event) => {
                         context.beginPath();
                     }
                 };
-
-                        // Arrow keys to change color
-                const handleKeyDown = (event) => {
-                    if (event.key === 'ArrowRight') {
-                        setCurrentColorIndex((prevIndex) => (prevIndex + 1) % colors.length); // Cycle forward through colors
-                    } else if (event.key === 'ArrowLeft') {
-                        setCurrentColorIndex((prevIndex) => (prevIndex - 1 + colors.length) % colors.length); // Cycle backward through colors
-                    }
-                };
     
                 canvas.addEventListener('mousedown', startDrawing);
                 canvas.addEventListener('mousemove', draw);
                 canvas.addEventListener('mouseup', stopDrawing);
-                canvas.addEventListener('contextmenu', event => event.preventDefault()); // Prevent the default context menu
-                window.addEventListener('keydown', handleKeyDown); // Listen for keydown events on the window
+                canvas.addEventListener('contextmenu', event => event.preventDefault());
             
                 return () => {
                     canvas.removeEventListener('mousedown', startDrawing);
                     canvas.removeEventListener('mousemove', draw);
                     canvas.removeEventListener('mouseup', stopDrawing);
                     canvas.removeEventListener('contextmenu', event => event.preventDefault());
-                    window.removeEventListener('keydown', handleKeyDown); // Clean up the event listener
                 };
             }
         });
-    }, [post.canvases, currentColorIndex, colors]); // Add currentColorIndex and colors to the dependency array
+    }, [post.canvases, currentColor]);
 
     return (
         <div className="create-animation">
@@ -242,19 +237,6 @@ const createPost = async (event) => {
                     <textarea id="description" name="description" rows="5" cols="50" value={post.description} onChange={handleChange} />
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="frameDelay">Frame Delay</label><br />
-                    <textarea
-                        id="frameDelay"
-                        name="frameDelay"
-                        rows="1"
-                        cols="1"
-                        value={post.frameDelay.toString()} // Convert the integer frameDelay back to a string for the textarea
-                        onChange={handleChange}
-                    />
-                </div>
-
-
                 {post.canvases.map((_, index) => (
                     <div key={index} className="canvas-container">
                         <label>Frame: {index + 1}</label><br />
@@ -263,26 +245,54 @@ const createPost = async (event) => {
                             width="600"
                             height="525"
                             className="animation-canvas"
-                            style={{ backgroundColor: 'white', border: '5px solid', borderColor: colors[currentColorIndex] }}
+                            style={{ backgroundColor: 'white', border: '5px solid', borderColor: currentColor }}
                         />
                         <br />
                     </div>
                 ))}
                 <div className="button-group">
+                <label>Edit Tools:</label>
+                <div>
                     <button type="button" onClick={addCanvas}>Add Frame</button>
                     {post.canvases.length > 1 && (
                         <button type="button" onClick={removeCanvas}>Remove Frame</button>
-                    )}
-                </div>
+                    )}                
                 <button onClick={copyCanvas} type="button">Copy Previous Frame</button>
+                </div>
+                </div>
+
+                <div>
+                </div>
+                <label>Brush Tools:</label>
+                <div>
+                    <button type="button" onClick={showBrushColors}>Change Brush Color</button>
+                    <div>
+                    {showColorPick && 
+                    <SketchPicker
+                    color={currentColor}
+                    onChangeComplete={(color) => setCurrentColor(color.hex)}
+                    />}
+                </div>
+                </div>
                 <div>
             <div>
-            <button onClick={createGIF} type="button">Preview Animation</button>                   
+            <label>Animation Preview:</label>
+            <div>
+            <button onClick={showHideGifPreview} type="button"> {showGifPreview ? "Hide" : "Show"} Preview Animation</button>    
+                    {[100, 200, 300, 400, 1000, 5000].map((delay, index) => {
+                        const durations = ['1s', '2s', '3s', '4s', '10s', '50s'];
+                        return (
+                            <button key={delay} type="button" onClick={() => setFrameDelay(delay)}>
+                                {durations[index]}
+                            </button>
+                        );
+                    })}               
+            </div>
             </div>
             {gifUrl && showGifPreview && <img src={gifUrl} alt="Generated GIF" style={{backgroundColor : 'white'}}/>}
             </div>
-                <div className="form-group">
-                    <input type="submit" value="Create Animation" />
+                <div className="form-group"> 
+                    <input type="submit" value={post.canvases.length > 1 ? "Create Animation" : "Create Post"} />
                 </div>
             </form>
         </div>
