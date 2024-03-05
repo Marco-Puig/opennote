@@ -39,13 +39,13 @@ const CreateAnimation = () => {
   };
 
   // Function to update frameDelay based on button click
-  const setFrameDelay = async (delay) => {
+  const setFrameDelay = (delay) => {
     setPost((prev) => ({
       ...prev,
       frameDelay: delay,
     }));
 
-    await createGIF();
+    createGIF();
   };
 
   const copyCanvas = () => {
@@ -69,6 +69,7 @@ const CreateAnimation = () => {
       return;
     }
 
+    createGIF();
     setShowGifPreview(!showGifPreview);
   };
 
@@ -319,7 +320,7 @@ const CreateAnimation = () => {
                 onChangeComplete={(color) => setCurrentColor(color.hex)}
               />
             )}
-            <label htmlFor="brushSize">Brush & Eraser Size: </label>
+            <label htmlFor="brushSize">Brush & Eraser Size: {brushSize} </label>
             <input
               id="brushSize"
               type="range"
@@ -333,24 +334,31 @@ const CreateAnimation = () => {
         </div>
         <div>
           <div>
-            <label>Animation Preview:</label>
+            <label>Animation Settings:</label>
             <div>
               <button onClick={showHideGifPreview} type="button">
-                {" "}
                 {showGifPreview ? "Hide" : "Show"} Preview Animation
               </button>
-              {[100, 200, 300, 400, 1000, 5000].map((delay, index) => {
-                const durations = ["1s", "2s", "3s", "4s", "10s", "50s"];
-                return (
-                  <button
-                    key={delay}
-                    type="button"
-                    onClick={() => setFrameDelay(delay)}
-                  >
-                    {durations[index]}
-                  </button>
-                );
-              })}
+              {showGifPreview && (
+                <button onClick={createGIF} type="button">
+                  Refresh Preview
+                </button>
+              )}
+            </div>
+            <div>
+              {showGifPreview &&
+                [100, 200, 300, 400, 1000, 5000].map((delay, index) => {
+                  const durations = ["1s", "2s", "3s", "4s", "10s", "50s"];
+                  return (
+                    <button
+                      key={delay}
+                      type="button"
+                      onClick={() => setFrameDelay(delay)}
+                    >
+                      {durations[index]}
+                    </button>
+                  );
+                })}
             </div>
           </div>
           {gifUrl && showGifPreview && (
