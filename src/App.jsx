@@ -13,23 +13,19 @@ const App = () => {
   // Sets up routes
   let element = useRoutes([
     {
-      path: "/",
+      path: "/opennote",
       element: <ReadFeatures />,
     },
     {
-      path: "/OpenNote",
-      element: <ReadFeatures />,
-    },
-    {
-      path: "/community",
+      path: "/opennote/community",
       element: <ReadPosts data={posts} />,
     },
     {
-      path: "/community/edit/:id",
+      path: "/opennote/community/edit/:id",
       element: <EditPost data={posts} />,
     },
     {
-      path: "/new",
+      path: "/opennote/new",
       element: <CreateAnimation />,
     },
   ]);
@@ -39,16 +35,16 @@ const App = () => {
       <div className="header">
         <h1>OpenNote 📝</h1>
         <div className="nav_links">
-          <Link to="/">
+          <Link to="/opennote">
             <button className="headerBtn"> Featured ⭐</button>
           </Link>
-          <Link to="/">
+          <Link to="/opennote">
             <button className="headerBtn"> Trending 📈 </button>
           </Link>
-          <Link to="/community">
+          <Link to="/opennote/community">
             <button className="headerBtn"> Community 🌐 </button>
           </Link>
-          <Link to="/new">
+          <Link to="/opennote/new">
             <button className="headerBtn"> Create Post ✍️ </button>
           </Link>
           <a href="https://ko-fi.com/marcopuig">

@@ -145,7 +145,7 @@ const CreateAnimation = () => {
         canvas: publicURL, // Save the public URL to the database for later retrieval
       });
 
-      window.location = "/OpenNote"; // Redirect to the home page after creating the post
+      window.location = "/opennote"; // Redirect to the home page after creating the post
     } catch (error) {
       console.error("Failed to create GIF or post:", error);
     }
