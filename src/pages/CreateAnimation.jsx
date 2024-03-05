@@ -319,7 +319,7 @@ const CreateAnimation = () => {
                 onChangeComplete={(color) => setCurrentColor(color.hex)}
               />
             )}
-            <label htmlFor="brushSize">Brush Size: </label>
+            <label htmlFor="brushSize">Brush & Eraser Size: </label>
             <input
               id="brushSize"
               type="range"
