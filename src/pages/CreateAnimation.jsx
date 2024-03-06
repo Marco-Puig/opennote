@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./CreateAnimation.css";
 import GifEncoder from "gif-encoder-2";
 import { supabase } from "../client";
@@ -23,6 +23,9 @@ const CreateAnimation = () => {
 
   const [brushSize, setBrushSize] = useState(5); // Default brush size
   const [eraserSize, setEraserSize] = useState(5); // Default brush size
+
+  const [undoStack, setUndoStack] = useState([]);
+  const [redoStack, setRedoStack] = useState([]);
 
   const width = 600;
   const height = 525;
@@ -66,6 +69,68 @@ const CreateAnimation = () => {
 
     currentCanvas.putImageData(previousCanvas, 0, 0);
   };
+
+  const undo = useCallback(() => {
+    setUndoStack((prevUndoStack) => {
+      const lastState =
+        prevUndoStack.length > 0
+          ? prevUndoStack[prevUndoStack.length - 1]
+          : null;
+      if (lastState) {
+        const currentCanvasIndex = post.canvases.length - 1;
+        const canvas = canvasRefs.current[currentCanvasIndex];
+        const context = canvas.getContext("2d");
+
+        // Save current state to redo stack before undoing
+        const currentState = context.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+        setRedoStack((prevRedoStack) => [...prevRedoStack, currentState]);
+
+        // Restore the last state
+        context.putImageData(lastState, 0, 0);
+
+        // Return the new undoStack without the last state
+        return prevUndoStack.slice(0, -1);
+      }
+      // Return the previous state if no lastState found
+      return prevUndoStack;
+    });
+  }, [post.canvases.length]);
+
+  const redo = useCallback(() => {
+    setRedoStack((prevRedoStack) => {
+      const nextState =
+        prevRedoStack.length > 0
+          ? prevRedoStack[prevRedoStack.length - 1]
+          : null;
+      if (nextState) {
+        const currentCanvasIndex = post.canvases.length - 1;
+        const canvas = canvasRefs.current[currentCanvasIndex];
+        const context = canvas.getContext("2d");
+
+        // Save current state to undo stack before redoing
+        const currentState = context.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+        setUndoStack((prevUndoStack) => [...prevUndoStack, currentState]);
+
+        // Apply the next state
+        context.putImageData(nextState, 0, 0);
+
+        // Return the new redoStack without the applied state
+        return prevRedoStack.slice(0, -1);
+      }
+      // Return the previous state if no nextState found
+      return prevRedoStack;
+    });
+  }, [post.canvases.length]);
 
   const showHideGifPreview = () => {
     if (post.canvases.length <= 1) {
@@ -172,66 +237,134 @@ const CreateAnimation = () => {
   };
 
   useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Undo with Ctrl + Z
+      if (
+        (event.ctrlKey && event.key === "z") ||
+        (event.ctrlKey && event.key === "Z")
+      ) {
+        event.preventDefault();
+        undo();
+      }
+
+      // Redo with Ctrl + Y (or Ctrl + Shift + Z for macOS)
+      if (
+        event.ctrlKey &&
+        (event.key === "y" || (event.shiftKey && event.key === "Z"))
+      ) {
+        event.preventDefault();
+        redo();
+        redo();
+      }
+    };
+
+    const startDrawing = (canvas, context, offsetX, offsetY) => {
+      context.beginPath();
+      context.moveTo(offsetX, offsetY);
+    };
+
+    const draw = (context, offsetX, offsetY) => {
+      context.lineTo(offsetX, offsetY);
+      context.stroke();
+    };
+
+    const stopDrawing = (context) => {
+      context.beginPath(); // Reset the current path to start a new one for future drawings
+    };
+
     post.canvases.forEach((_, index) => {
       const canvas = canvasRefs.current[index];
       if (canvas) {
         const context = canvas.getContext("2d");
         let isDrawing = false;
 
-        const startDrawing = (event) => {
-          isDrawing = true;
+        canvas.addEventListener("mousedown", (event) => {
           const rect = canvas.getBoundingClientRect();
           const offsetX = event.clientX - 5 - rect.left;
           const offsetY = event.clientY - 5 - rect.top;
-          context.beginPath();
-          context.moveTo(offsetX, offsetY);
 
-          // Brush Color
-          if (event.button === 0) {
-            context.strokeStyle = currentColor;
-            context.lineWidth = brushSize; // Use brushSize for line width
-          } else if (event.button === 2) {
-            // Eraser
-            context.strokeStyle = "white";
-            context.lineWidth = eraserSize; // Use brushSize for line width
-          }
-        };
+          // Capture the canvas state before drawing begins
+          setUndoStack((prevUndoStack) => {
+            const imageData = context.getImageData(
+              0,
+              0,
+              canvas.width,
+              canvas.height
+            );
+            return [...prevUndoStack, imageData];
+          });
 
-        const draw = (event) => {
+          // Clear redo stack as new action is taken
+          setRedoStack([]);
+
+          // Set drawing color and size
+          context.strokeStyle = currentColor;
+          context.lineWidth = event.button === 2 ? eraserSize : brushSize; // Right-click for eraser
+
+          isDrawing = true;
+          startDrawing(canvas, context, offsetX, offsetY);
+
+          event.preventDefault(); // Prevent default to avoid any unwanted behavior
+        });
+
+        canvas.addEventListener("mousemove", (event) => {
           if (isDrawing) {
             const rect = canvas.getBoundingClientRect();
             const offsetX = event.clientX - 5 - rect.left;
             const offsetY = event.clientY - 5 - rect.top;
-            context.lineTo(offsetX, offsetY);
-            context.stroke();
+            draw(context, offsetX, offsetY);
           }
-        };
+        });
 
-        const stopDrawing = () => {
+        window.addEventListener("mouseup", () => {
           if (isDrawing) {
             isDrawing = false;
-            context.beginPath();
+            stopDrawing(context);
           }
-        };
+        });
 
-        canvas.addEventListener("mousedown", startDrawing);
-        canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("mouseup", stopDrawing);
         canvas.addEventListener("contextmenu", (event) =>
           event.preventDefault()
         );
+      }
+    });
 
-        return () => {
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Clean up event listeners
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      post.canvases.forEach((_, index) => {
+        const canvas = canvasRefs.current[index];
+        if (canvas) {
           canvas.removeEventListener("mousedown", startDrawing);
           canvas.removeEventListener("mousemove", draw);
-          canvas.removeEventListener("mouseup", stopDrawing);
+          window.removeEventListener("mouseup", stopDrawing);
           canvas.removeEventListener("contextmenu", (event) =>
             event.preventDefault()
           );
-        };
-      }
-    });
-  }, [post.canvases, currentColor, brushSize, eraserSize]);
+        }
+      });
+    };
+  }, [
+    post.canvases,
+    currentColor,
+    brushSize,
+    eraserSize,
+    undo,
+    redo,
+    post.canvases.length,
+  ]);
+
+  const doubleRedo = () => {
+    redo();
+    setTimeout(redo, 0);
+  };
+
+  // In your button:
+  <button type="button" onClick={doubleRedo}>
+    Redo Twice
+  </button>;
 
   return (
     <div className="create-animation">
@@ -305,6 +438,12 @@ const CreateAnimation = () => {
             )}
             <button onClick={copyCanvas} type="button">
               Copy Previous Frame
+            </button>
+            <button type="button" onClick={undo}>
+              Undo
+            </button>
+            <button type="button" onClick={doubleRedo}>
+              Redo
             </button>
           </div>
         </div>
