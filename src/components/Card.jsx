@@ -36,7 +36,7 @@ const Card = (props) => {
       <div className="Card-header">
         <div className="Header-edit-button">
           <Link to={"/opennote/community/edit/:id" + props.id}>
-            <img className="moreButton" alt="edit button" src={more} />
+            {/*<img className="moreButton" alt="edit button" src={more} /> */}
           </Link>
         </div>
         <div className="Card-header-content">

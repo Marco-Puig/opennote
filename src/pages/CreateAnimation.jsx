@@ -22,6 +22,7 @@ const CreateAnimation = () => {
   const [showGifPreview, setShowGifPreview] = useState(false);
 
   const [brushSize, setBrushSize] = useState(5); // Default brush size
+  const [eraserSize, setEraserSize] = useState(5); // Default brush size
 
   window.Buffer = Buffer;
 
@@ -191,7 +192,7 @@ const CreateAnimation = () => {
           } else if (event.button === 2) {
             // Eraser
             context.strokeStyle = "white";
-            context.lineWidth = brushSize; // Use brushSize for line width
+            context.lineWidth = eraserSize; // Use brushSize for line width
           }
         };
 
@@ -229,7 +230,7 @@ const CreateAnimation = () => {
         };
       }
     });
-  }, [post.canvases, currentColor, brushSize]);
+  }, [post.canvases, currentColor, brushSize, eraserSize]);
 
   return (
     <div className="create-animation">
@@ -320,7 +321,9 @@ const CreateAnimation = () => {
                 onChangeComplete={(color) => setCurrentColor(color.hex)}
               />
             )}
-            <label htmlFor="brushSize">Brush & Eraser Size: {brushSize} </label>
+          </div>
+          <div>
+            <label htmlFor="brushSize">Brush Size: {brushSize} </label>
             <input
               id="brushSize"
               type="range"
@@ -328,6 +331,18 @@ const CreateAnimation = () => {
               max="20"
               value={brushSize}
               onChange={(e) => setBrushSize(e.target.value)}
+              style={{ margin: "0 10px" }}
+            />
+          </div>
+          <div>
+            <label htmlFor="eraserSize">Eraser Size: {eraserSize} </label>
+            <input
+              id="eraserSize"
+              type="range"
+              min="1"
+              max="20"
+              value={eraserSize}
+              onChange={(e) => setEraserSize(e.target.value)}
               style={{ margin: "0 10px" }}
             />
           </div>
