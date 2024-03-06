@@ -1,5 +1,5 @@
 {
-  "homepage" : "https://marco-puig.github.io/opennote",
+  "homepage": "https://marco-puig.github.io/opennote",
   "name": "openote",
   "version": "0.1.0",
   "private": true,
@@ -13,6 +13,7 @@
     "dotenv": "^16.4.4",
     "gif-encoder-2": "^1.0.5",
     "gif.js": "^0.2.0",
+    "p5": "^1.9.1",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",

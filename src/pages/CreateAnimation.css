@@ -6,13 +6,17 @@ input {
     border: 1px solid transparent;
     font-size: 20px;
     padding-left: 10px;
+    font-family: "Pixel";
 }
 
 label {
     font-size: 20px;
+    font-family: "Pixel";
+    font-weight: bold;
 }
 
 textarea {
+    margin-top: 10px;
     border-radius: 8px;
     width: 100%;
     border: 1px solid transparent;
@@ -33,9 +37,24 @@ input[type=submit] {
     cursor: pointer;
     transition: border-color 0.25s;
     margin-top: 20px;
+    font-family: "Pixel";
+    font-weight: bold;
   }
 
 input[type=submit]:hover {
     border-color: #646cff;
 }
 
+button {
+    font-family: "Pixel";
+    font-size: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    font-family: "Pixel";
+}
+
+.animation-canvas {
+    cursor: crosshair;
+}

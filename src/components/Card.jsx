@@ -61,15 +61,13 @@ const Card = (props) => {
         <button className="likeButton" onClick={toggleLike}>
           👍 Likes: {props.likes + count}
         </button>
-        <button className="likeButton" onClick={makeFeatured}>
+        {/* Allows Admins to feature a post */}
+        {/*  <button className="likeButton" onClick={makeFeatured}>
           ⭐ Feature
-        </button>
+        </button> */}
       </div>
     </div>
   );
 };
-
-// Allows Admins to feature a post
-// <button className="likeButton" onClick={makeFeatured} >⭐ Feature</button>
 
 export default Card;

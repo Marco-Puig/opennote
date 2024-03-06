@@ -24,6 +24,9 @@ const CreateAnimation = () => {
   const [brushSize, setBrushSize] = useState(5); // Default brush size
   const [eraserSize, setEraserSize] = useState(5); // Default brush size
 
+  const width = 600;
+  const height = 525;
+
   window.Buffer = Buffer;
 
   // This useEffect ensures that canvasRefs.current always has the same length as post.canvases
@@ -59,14 +62,14 @@ const CreateAnimation = () => {
       canvasRefs.current[post.canvases.length - 1].getContext("2d");
     const previousCanvas = canvasRefs.current[post.canvases.length - 2]
       .getContext("2d")
-      .getImageData(0, 0, 600, 525);
+      .getImageData(0, 0, width, height);
 
     currentCanvas.putImageData(previousCanvas, 0, 0);
   };
 
   const showHideGifPreview = () => {
     if (post.canvases.length <= 1) {
-      alert("Please add at least one prior frame for reference.");
+      alert("Please add at least two frames for an animation.");
       return;
     }
 
@@ -82,9 +85,6 @@ const CreateAnimation = () => {
         return;
       }
 
-      const width = 600;
-      const height = 525;
-
       const gif = new GifEncoder(width, height);
       gif.setDelay(post.frameDelay); // Adjust delay as needed
       gif.start();
@@ -92,7 +92,7 @@ const CreateAnimation = () => {
       for (const canvas of canvasRefs.current) {
         if (canvas) {
           const ctx = canvas.getContext("2d");
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const imageData = ctx.getImageData(0, 0, width, height);
 
           // Change transparent background to white
           for (let i = 0; i < imageData.data.length; i += 4) {
@@ -152,6 +152,7 @@ const CreateAnimation = () => {
       console.error("Failed to create GIF or post:", error);
     }
   };
+
   const addCanvas = () => {
     setPost((prev) => ({
       ...prev,
@@ -180,8 +181,8 @@ const CreateAnimation = () => {
         const startDrawing = (event) => {
           isDrawing = true;
           const rect = canvas.getBoundingClientRect();
-          const offsetX = event.clientX - rect.left;
-          const offsetY = event.clientY - rect.top;
+          const offsetX = event.clientX - 5 - rect.left;
+          const offsetY = event.clientY - 5 - rect.top;
           context.beginPath();
           context.moveTo(offsetX, offsetY);
 
@@ -199,8 +200,8 @@ const CreateAnimation = () => {
         const draw = (event) => {
           if (isDrawing) {
             const rect = canvas.getBoundingClientRect();
-            const offsetX = event.clientX - rect.left;
-            const offsetY = event.clientY - rect.top;
+            const offsetX = event.clientX - 5 - rect.left;
+            const offsetY = event.clientY - 5 - rect.top;
             context.lineTo(offsetX, offsetY);
             context.stroke();
           }
@@ -266,7 +267,7 @@ const CreateAnimation = () => {
           <textarea
             id="description"
             name="description"
-            rows="5"
+            rows="2"
             cols="50"
             value={post.description}
             onChange={handleChange}
@@ -279,8 +280,8 @@ const CreateAnimation = () => {
             <br />
             <canvas
               ref={(el) => (canvasRefs.current[index] = el)}
-              width="600"
-              height="525"
+              width={width}
+              height={height}
               className="animation-canvas"
               style={{
                 backgroundColor: "white",
@@ -328,7 +329,7 @@ const CreateAnimation = () => {
               id="brushSize"
               type="range"
               min="1"
-              max="20"
+              max="30"
               value={brushSize}
               onChange={(e) => setBrushSize(e.target.value)}
               style={{ margin: "0 10px" }}
@@ -340,7 +341,7 @@ const CreateAnimation = () => {
               id="eraserSize"
               type="range"
               min="1"
-              max="20"
+              max="40"
               value={eraserSize}
               onChange={(e) => setEraserSize(e.target.value)}
               style={{ margin: "0 10px" }}
@@ -387,9 +388,7 @@ const CreateAnimation = () => {
         <div className="form-group">
           <input
             type="submit"
-            value={
-              post.canvases.length > 1 ? "Create Animation" : "Create Post"
-            }
+            value={post.canvases.length > 1 ? "Post Animation" : "Create Post"}
           />
         </div>
       </form>
