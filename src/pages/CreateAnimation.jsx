@@ -27,6 +27,8 @@ const CreateAnimation = () => {
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
 
+  const [zoomToggled, setZoomToggled] = useState(false);
+
   const width = 600;
   const height = 525;
 
@@ -298,7 +300,7 @@ const CreateAnimation = () => {
           setRedoStack([]);
 
           // Set drawing color and size
-          context.strokeStyle = currentColor;
+          context.strokeStyle = event.button === 2 ? "white" : currentColor; // Right-click for eraser
           context.lineWidth = event.button === 2 ? eraserSize : brushSize; // Right-click for eraser
 
           isDrawing = true;
@@ -359,6 +361,16 @@ const CreateAnimation = () => {
   const doubleRedo = () => {
     redo();
     setTimeout(redo, 0);
+  };
+
+  const zoomFunc = () => {
+    if (!zoomToggled) {
+      document.body.style.zoom = "130%";
+      setZoomToggled(true);
+    } else {
+      document.body.style.zoom = "100%";
+      setZoomToggled(false);
+    }
   };
 
   // In your button:
@@ -444,6 +456,9 @@ const CreateAnimation = () => {
             </button>
             <button type="button" onClick={doubleRedo}>
               Redo
+            </button>
+            <button type="button" onClick={zoomFunc}>
+              Zoom {zoomToggled ? "Out" : "In"}
             </button>
           </div>
         </div>

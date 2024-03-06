@@ -65,6 +65,7 @@ const Card = (props) => {
         {/*  <button className="likeButton" onClick={makeFeatured}>
           ⭐ Feature
         </button> */}
+        {props.featured ? <p>Featured</p> : null}
       </div>
     </div>
   );
