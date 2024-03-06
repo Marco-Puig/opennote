@@ -1,14 +1,12 @@
 @font-face {
   font-family: "Pixel";
-  src: url(Fonts/Pixel.TTF);
+  src: url(fonts/JosefinSans.ttf);
 }
 
 @font-face {
   font-family: "Upheav";
-  src: url(Fonts/upheav.ttf);
+  src: url(fonts/JosefinSans.ttf);
 }
-
-
 
 .App {
   font-family:Avenir, "Century Gothic", sans-serif;
@@ -38,7 +36,7 @@
 
 .header h1{
   font-family:"Pixel" ;
-  font-size: 36px;
+  font-size: 40px;
 }
 
 .headerBtn {
@@ -48,9 +46,7 @@
 }
 
 h1 {
-  padding-top: 10px; ;
   padding-left: 40px ;
-  font-size:30px;
 }
 
 button {
@@ -59,7 +55,7 @@ button {
   margin-bottom: 10px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 500;
   font-family: inherit;
   background-color: #773193;
