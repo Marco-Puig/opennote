@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/opennote/static/css/main.e9a71f4b.css",
-    "main.js": "/opennote/static/js/main.e9915ccb.js",
+    "main.css": "/opennote/static/css/main.c6aa6c27.css",
+    "main.js": "/opennote/static/js/main.4e1468b1.js",
     "static/js/289.0be6ead6.chunk.js": "/opennote/static/js/289.0be6ead6.chunk.js",
     "static/media/JosefinSans.ttf": "/opennote/static/media/JosefinSans.613585db06f849ca7717.ttf",
     "static/media/more.png": "/opennote/static/media/more.b1d4972864aba11f95a9.png",
     "index.html": "/opennote/index.html",
-    "main.e9a71f4b.css.map": "/opennote/static/css/main.e9a71f4b.css.map",
-    "main.e9915ccb.js.map": "/opennote/static/js/main.e9915ccb.js.map",
+    "main.c6aa6c27.css.map": "/opennote/static/css/main.c6aa6c27.css.map",
+    "main.4e1468b1.js.map": "/opennote/static/js/main.4e1468b1.js.map",
     "289.0be6ead6.chunk.js.map": "/opennote/static/js/289.0be6ead6.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e9a71f4b.css",
-    "static/js/main.e9915ccb.js"
+    "static/css/main.c6aa6c27.css",
+    "static/js/main.4e1468b1.js"
   ]
 }
