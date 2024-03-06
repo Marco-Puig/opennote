@@ -1,3 +1,15 @@
+@font-face {
+  font-family: "Pixel";
+  src: url(Fonts/Pixel.TTF);
+}
+
+@font-face {
+  font-family: "Upheav";
+  src: url(Fonts/upheav.ttf);
+}
+
+
+
 .App {
   font-family:Avenir, "Century Gothic", sans-serif;
   font-weight:100; 
@@ -24,6 +36,11 @@
   margin-bottom: 20px;
 }
 
+.header h1{
+  font-family:"Pixel" ;
+  font-size: 36px;
+}
+
 .headerBtn {
   margin-top: 30px;
   margin-bottom: 50px;
@@ -46,11 +63,18 @@ button {
   background-color: #773193;
   color:rgb(255, 251, 251);
   cursor: pointer;
-  transition: all 0.5s ease;
+  transition: all 0.5s ease-in-out;
 }
 
 button:hover {
   border-color: #ffffff;
   cursor: pointer;
   transform: scale(1.2);
+  transition: all 0.5s ease-in-out;
+}
+
+
+.nav_links{
+  font-family: "Upheav";
+  font-size: 16px;
 }
