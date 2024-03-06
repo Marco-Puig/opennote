@@ -2,12 +2,12 @@
 
 OpenNote is a contemporary evolution of Flipnote, seamlessly blending the nostalgic charm of the classic animation tool with cutting-edge features. This successor introduces a sleek, user-friendly interface, empowering artists with enhanced drawing tools and animation capabilities. OpenNote reimagines the beloved Flipnote experience for a new generation, fostering creativity and collaboration in a modern digital landscape.
 
-## Overview
-### Feburary 28th 2024
-![Capture](https://github.com/Marco-Puig/OpenNote/assets/90495366/bc388832-f1e7-4da7-8b94-5f347277e155)
+## Screenshot
+### March 3rd 2024
+![Capture](https://github.com/Marco-Puig/OpenNote/assets/90495366/454ba3f9-5cc8-4e8d-8cb7-c11dfbf0185c)
 
-### Feburary 14th 2024
-https://github.com/Marco-Puig/OpenNote/assets/90495366/8c66d30d-08dc-4695-ae11-6a9a930145b5
+### Overview
+https://www.youtube.com/watch?v=HuUSYCK0Fuo
 
 ## Get Started
 
@@ -30,3 +30,19 @@ Launches unit testing via the interactive watch mode.
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
+
+## License
+
+    Copyright [2024] [Marco Puig]
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.

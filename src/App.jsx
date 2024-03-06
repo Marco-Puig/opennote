@@ -1,60 +1,60 @@
-import './App.css';
-import React from 'react';
-import { useRoutes } from 'react-router-dom'
-import ReadPosts from './pages/ReadPosts'
-import ReadFeatures from './pages/ReadFeatures'
-import CreatePost from './pages/CreatePost'
-import CreateAnimation from './pages/CreateAnimation'
-import EditPost from './pages/EditPost'
-import { Link } from 'react-router-dom'
-
+import "./App.css";
+import React from "react";
+import { useRoutes } from "react-router-dom";
+import ReadPosts from "./pages/ReadPosts";
+import ReadFeatures from "./pages/ReadFeatures";
+import CreateAnimation from "./pages/CreateAnimation";
+import EditPost from "./pages/EditPost";
+import { Link } from "react-router-dom";
 
 const App = () => {
+  const posts = [];
 
-  const posts = []
- 
   // Sets up routes
   let element = useRoutes([
     {
-      path:"/",
-      element: <ReadFeatures />
+      path: "/opennote",
+      element: <ReadFeatures />,
     },
     {
-      path: "/community",
-      element:<ReadPosts data={posts}/>
+      path: "/opennote/community",
+      element: <ReadPosts data={posts} />,
     },
     {
-      path:"/community/edit/:id",
-      element: <EditPost data={posts} />
+      path: "/opennote/community/edit/:id",
+      element: <EditPost data={posts} />,
     },
     {
-      path:"/new",
-      element: <CreatePost />
+      path: "/opennote/new",
+      element: <CreateAnimation />,
     },
-    {
-      path:"/animate",
-      element: <CreateAnimation />
-    }
   ]);
 
-
-  return ( 
-
+  return (
     <div className="App">
-
       <div className="header">
         <h1>OpenNote 📝</h1>
         <div className="nav_links">
-          <Link to="/"><button className="headerBtn"> Featured ⭐ </button></Link>
-          <Link to="/community"><button className="headerBtn"> Community 🌐 </button></Link>
-          <Link to="/new"><button className="headerBtn"> Create Post ✍️ </button></Link>
-          <Link to="/animate"><button className="headerBtn"> Create Animation 📙 </button></Link>
-          <a href="https://ko-fi.com/marcopuig"><button className="headerBtn"> Support Us ❤️</button></a></div>
+          <Link to="/opennote">
+            <button className="headerBtn"> Featured ⭐</button>
+          </Link>
+          <Link to="/opennote">
+            <button className="headerBtn"> Trending 📈 </button>
+          </Link>
+          <Link to="/opennote/community">
+            <button className="headerBtn"> Community 🌐 </button>
+          </Link>
+          <Link to="/opennote/new">
+            <button className="headerBtn"> Create Post ✍️ </button>
+          </Link>
+          <a href="https://ko-fi.com/marcopuig">
+            <button className="headerBtn"> Support Us ❤️</button>
+          </a>
+        </div>
       </div>
-        {element}
+      {element}
     </div>
-
   );
-}
+};
 
 export default App;
