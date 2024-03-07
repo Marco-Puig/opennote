@@ -35,7 +35,20 @@ const CreateAnimation = () => {
   // This useEffect ensures that canvasRefs.current always has the same length as post.canvases
   useEffect(() => {
     canvasRefs.current = canvasRefs.current.slice(0, post.canvases.length);
+    fetchUserData();
   }, [post.canvases.length]);
+
+  const fetchUserData = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      setPost((prev) => ({
+        ...prev,
+        author: user.user_metadata.display_name,
+      }));
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -378,20 +391,6 @@ const CreateAnimation = () => {
             name="title"
             required
             value={post.title}
-            onChange={handleChange}
-          />
-          <br />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="author">Author</label>
-          <br />
-          <input
-            type="text"
-            id="author"
-            name="author"
-            required
-            value={post.author}
             onChange={handleChange}
           />
           <br />

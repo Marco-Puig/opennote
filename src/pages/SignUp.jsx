@@ -16,7 +16,11 @@ function SignUp() {
     const { error } = await supabase.auth.signUp({
       email: email,
       password: password,
-      data: { username: username },
+      options: {
+        data: {
+          display_name: username,
+        },
+      },
     });
 
     if (error) {
@@ -43,7 +47,7 @@ function SignUp() {
             required
           />
         </div>
-        {/*  <div>
+        <div>
           <label htmlFor="Username">Username</label>
           <input
             id="username"
@@ -53,7 +57,7 @@ function SignUp() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>*/}
+        </div>
         <div>
           <label htmlFor="password">Password</label>
           <input

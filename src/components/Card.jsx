@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./Card.css";
 import more from "./more.png";
@@ -8,6 +8,19 @@ import { supabase } from "../client";
 const Card = (props) => {
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(0);
+  const [nameData, setNameData] = useState(null);
+
+  useEffect(() => {
+    // checkLiked();
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    setNameData(user.user_metadata.display_name);
+  };
 
   const toggleLike = async () => {
     // Toggle the liked state
@@ -48,7 +61,9 @@ const Card = (props) => {
       <div className="Card-header">
         <div className="Header-edit-button">
           <Link to={"/opennote/community/edit/:id" + props.id}>
-            {/*<img className="moreButton" alt="edit button" src={more} /> */}
+            {props.author === nameData && (
+              <img className="moreButton" alt="edit button" src={more} />
+            )}
           </Link>
         </div>
         <div className="Card-header-content">

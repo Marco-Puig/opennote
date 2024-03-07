@@ -17,13 +17,14 @@ const Profile = (props) => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
     if (user) {
       setUserData(user);
       const { data, error } = await supabase
         .from("Posts")
         .select("*")
         .order("created_at", { ascending: false })
-        .filter("author", "eq", user.email);
+        .filter("author", "eq", user.user_metadata.display_name);
 
       if (error) {
         console.error("error fetching posts", error);
@@ -35,15 +36,21 @@ const Profile = (props) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <h2 className="posts">Loading...</h2>
+      </div>
+    );
   }
 
   return (
     <>
       <div className="profile">
-        <p className="profile-title">
-          {userData ? `${userData.email}'s Profile` : "Profile"}
-        </p>
+        <h2 className="posts">
+          {userData
+            ? `${userData.user_metadata.display_name}'s Profile`
+            : "Failed to load Profile"}
+        </h2>
         <div className="ReadPosts">
           {posts && posts.length > 0 ? (
             posts.map((post, index) => (
