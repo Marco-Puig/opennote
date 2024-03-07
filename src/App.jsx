@@ -81,9 +81,16 @@ const App = () => {
           <Link to="/opennote/community">
             <button className="headerBtn"> Community 🌐 </button>
           </Link>
-          <Link to="/opennote/new">
-            <button className="headerBtn"> Create Post ✍️ </button>
-          </Link>
+
+          {userData ? (
+            <Link to="/opennote/new">
+              <button className="headerBtn"> Create Post ✍️ </button>
+            </Link>
+          ) : (
+            <Link to="/opennote/signin">
+              <button className="headerBtn"> Create Post ✍️ </button>
+            </Link>
+          )}
           {userData ? (
             <>
               <Link to="/opennote/profile">
