@@ -6,6 +6,8 @@ import ReadFeatures from "./pages/ReadFeatures";
 import CreateAnimation from "./pages/CreateAnimation";
 import EditPost from "./pages/EditPost";
 import { Link } from "react-router-dom";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 const App = () => {
   const posts = [];
@@ -27,6 +29,14 @@ const App = () => {
     {
       path: "/opennote/new",
       element: <CreateAnimation />,
+    },
+    {
+      path: "/opennote/signin",
+      element: <SignIn />,
+    },
+    {
+      path: "/opennote/signup",
+      element: <SignUp />,
     },
   ]);
 
@@ -50,6 +60,9 @@ const App = () => {
           <a href="https://ko-fi.com/marcopuig">
             <button className="headerBtn"> Support Us ❤️</button>
           </a>
+          <Link to="/opennote/signin">
+            <button className="headerBtn"> Sign In 🔘 </button>
+          </Link>
         </div>
       </div>
       {element}

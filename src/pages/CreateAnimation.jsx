@@ -278,6 +278,7 @@ const CreateAnimation = () => {
       const canvas = canvasRefs.current[index];
       if (canvas) {
         const context = canvas.getContext("2d");
+        context.lineCap = "round";
         let isDrawing = false;
 
         canvas.addEventListener("mousedown", (event) => {
@@ -457,9 +458,9 @@ const CreateAnimation = () => {
             <button type="button" onClick={doubleRedo}>
               Redo
             </button>
-            <button type="button" onClick={zoomFunc}>
+            {/*<button type="button" onClick={zoomFunc}>
               Zoom {zoomToggled ? "Out" : "In"}
-            </button>
+            </button>*/}
           </div>
         </div>
 

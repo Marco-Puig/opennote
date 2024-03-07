@@ -96,3 +96,16 @@
 .moreButton:hover {
     transform: scale(1.2);
 }
+
+p {
+    font-family: "Pixel";
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.tag {
+    font-family: "Pixel";
+    font-size: 18px;
+    color: #dad38d;
+    margin-bottom: 15px;
+}

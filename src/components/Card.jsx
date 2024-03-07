@@ -41,6 +41,7 @@ const Card = (props) => {
         </div>
         <div className="Card-header-content">
           <h2 className="title">{props.title}</h2>
+          {props.featured ? <h3 className="tag">Featured</h3> : null}
           <h3 className="author">{"by " + props.author}</h3>
           <h3 className="author">{"Posted: " + props.date.slice(0, 10)}</h3>
           <p className="description">{props.description}</p>
@@ -65,7 +66,7 @@ const Card = (props) => {
         {/*  <button className="likeButton" onClick={makeFeatured}>
           ⭐ Feature
         </button> */}
-        {props.featured ? <p>Featured</p> : null}
+        <button className="likeButton"> 💾 Save</button>
       </div>
     </div>
   );
