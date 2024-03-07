@@ -6,6 +6,7 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -15,6 +16,7 @@ function SignUp() {
     const { error } = await supabase.auth.signUp({
       email: email,
       password: password,
+      data: { username: username },
     });
 
     if (error) {
@@ -41,6 +43,17 @@ function SignUp() {
             required
           />
         </div>
+        {/*  <div>
+          <label htmlFor="Username">Username</label>
+          <input
+            id="username"
+            type="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>*/}
         <div>
           <label htmlFor="password">Password</label>
           <input

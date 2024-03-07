@@ -27,9 +27,21 @@ const Card = (props) => {
 
   const makeFeatured = async (event) => {
     event.preventDefault();
-
     await supabase.from("Posts").update({ featured: true }).eq("id", props.id);
   };
+
+  async function downloadImage(imageSrc) {
+    const image = await fetch(imageSrc);
+    const imageBlog = await image.blob();
+    const imageURL = URL.createObjectURL(imageBlog);
+
+    const link = document.createElement("a");
+    link.href = imageURL;
+    link.download = "animation.gif";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   return (
     <div className="Card">
@@ -41,7 +53,7 @@ const Card = (props) => {
         </div>
         <div className="Card-header-content">
           <h2 className="title">{props.title}</h2>
-          {props.featured ? <h3 className="tag">Featured</h3> : null}
+          {props.featured ? <h3 className="tag-featured">Featured</h3> : null}
           <h3 className="author">{"by " + props.author}</h3>
           <h3 className="author">{"Posted: " + props.date.slice(0, 10)}</h3>
           <p className="description">{props.description}</p>
@@ -66,7 +78,12 @@ const Card = (props) => {
         {/*  <button className="likeButton" onClick={makeFeatured}>
           ⭐ Feature
         </button> */}
-        <button className="likeButton"> 💾 Save</button>
+        <button
+          className="likeButton"
+          onClick={() => downloadImage(props.canvas)}
+        >
+          💾 Save
+        </button>
       </div>
     </div>
   );

@@ -103,9 +103,35 @@ p {
     margin-bottom: 10px;
 }
 
-.tag {
+.tag-featured {
     font-family: "Pixel";
     font-size: 18px;
     color: #dad38d;
     margin-bottom: 15px;
+}
+
+.tag-saved {
+    font-family: "Pixel";
+    font-size: 18px;
+    color: #cfcbcb;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.posts {
+    font-family: "Pixel";
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.profile-title {
+    display: center;
+    font-family: "Pixel";
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-left: 17px;
 }

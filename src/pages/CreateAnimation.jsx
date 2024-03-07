@@ -27,8 +27,6 @@ const CreateAnimation = () => {
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
 
-  const [zoomToggled, setZoomToggled] = useState(false);
-
   const width = 600;
   const height = 525;
 
@@ -364,16 +362,6 @@ const CreateAnimation = () => {
     setTimeout(redo, 0);
   };
 
-  const zoomFunc = () => {
-    if (!zoomToggled) {
-      document.body.style.zoom = "130%";
-      setZoomToggled(true);
-    } else {
-      document.body.style.zoom = "100%";
-      setZoomToggled(false);
-    }
-  };
-
   // In your button:
   <button type="button" onClick={doubleRedo}>
     Redo Twice
@@ -388,6 +376,7 @@ const CreateAnimation = () => {
             type="text"
             id="title"
             name="title"
+            required
             value={post.title}
             onChange={handleChange}
           />
@@ -401,6 +390,7 @@ const CreateAnimation = () => {
             type="text"
             id="author"
             name="author"
+            required
             value={post.author}
             onChange={handleChange}
           />
@@ -415,6 +405,7 @@ const CreateAnimation = () => {
             name="description"
             rows="2"
             cols="50"
+            required
             value={post.description}
             onChange={handleChange}
           />

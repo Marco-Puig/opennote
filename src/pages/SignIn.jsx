@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "../client";
+import { Link } from "react-router-dom";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -55,12 +56,9 @@ function SignIn() {
         <button type="submit" disabled={loading}>
           {loading ? "Signing in..." : "Sign in"}
         </button>
-        <button
-          type="submit"
-          onClick={() => (window.location.href = "/opennote/signup")}
-        >
-          {"Sign up"}
-        </button>
+        <Link to="/opennote/signup">
+          <button type="submit">Sign up</button>
+        </Link>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
