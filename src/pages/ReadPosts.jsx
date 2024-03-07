@@ -32,6 +32,7 @@ const ReadPosts = (props) => {
             likes={post.likes}
             canvas={post.canvas}
             featured={post.featured}
+            author_id={post.author_id}
           />
         ))
       ) : (

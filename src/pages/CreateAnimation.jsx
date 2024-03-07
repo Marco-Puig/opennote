@@ -12,6 +12,7 @@ const CreateAnimation = () => {
     description: "",
     canvases: [],
     frameDelay: 500,
+    authorId: "",
   });
   const canvasRefs = useRef([]);
 
@@ -46,6 +47,7 @@ const CreateAnimation = () => {
       setPost((prev) => ({
         ...prev,
         author: user.user_metadata.display_name,
+        authorId: user.id,
       }));
     }
   };
@@ -223,6 +225,7 @@ const CreateAnimation = () => {
         author: post.author,
         description: post.description,
         canvas: publicURL, // Save the public URL to the database for later retrieval
+        author_id: post.authorId,
       });
 
       window.location = "/opennote"; // Redirect to the home page after creating the post

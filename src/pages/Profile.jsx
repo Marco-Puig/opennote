@@ -24,7 +24,7 @@ const Profile = (props) => {
         .from("Posts")
         .select("*")
         .order("created_at", { ascending: false })
-        .filter("author", "eq", user.user_metadata.display_name);
+        .filter("author_id", "eq", user.id);
 
       if (error) {
         console.error("error fetching posts", error);
@@ -63,6 +63,7 @@ const Profile = (props) => {
                 likes={post.likes}
                 canvas={post.canvas}
                 saved={post.featured}
+                author_id={post.author_id}
               />
             ))
           ) : (

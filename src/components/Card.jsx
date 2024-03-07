@@ -19,7 +19,7 @@ const Card = (props) => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    setNameData(user.user_metadata.display_name);
+    setNameData(user.id);
   };
 
   const toggleLike = async () => {
@@ -61,7 +61,7 @@ const Card = (props) => {
       <div className="Card-header">
         <div className="Header-edit-button">
           <Link to={"/opennote/community/edit/:id" + props.id}>
-            {props.author === nameData && (
+            {props.author_id === nameData && (
               <img className="moreButton" alt="edit button" src={more} />
             )}
           </Link>
