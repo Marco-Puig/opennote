@@ -28,6 +28,8 @@ const CreateAnimation = () => {
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
 
+  const [loading, setLoading] = useState(false);
+
   const width = 600;
   const height = 525;
 
@@ -201,6 +203,8 @@ const CreateAnimation = () => {
 
   const createPost = async (event) => {
     event.preventDefault();
+
+    setLoading(true);
 
     try {
       const blob = await createGIF(); // Wait for the GIF creation to finish
@@ -516,8 +520,8 @@ const CreateAnimation = () => {
                   return (
                     <button
                       key={delay}
-                      type="button"
                       onClick={() => setFrameDelay(delay)}
+                      type="button"
                     >
                       {durations[index]}
                     </button>
@@ -536,7 +540,13 @@ const CreateAnimation = () => {
         <div className="form-group">
           <input
             type="submit"
-            value={post.canvases.length > 1 ? "Post Animation" : "Create Post"}
+            value={
+              loading
+                ? "Uploading..."
+                : post.canvases.length > 1
+                ? "Post Animation"
+                : "Create Post"
+            }
           />
         </div>
       </form>

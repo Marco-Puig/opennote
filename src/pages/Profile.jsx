@@ -52,9 +52,11 @@ const Profile = (props) => {
             : "Failed to load Profile"}
         </h2>
         <div className="ReadPosts">
-          {posts && posts.length > 0 ? (
+          {posts &&
+            posts.length > 0 &&
             posts.map((post, index) => (
               <Card
+                key={index}
                 id={post.id}
                 title={post.title}
                 author={post.author}
@@ -62,13 +64,10 @@ const Profile = (props) => {
                 description={post.description}
                 likes={post.likes}
                 canvas={post.canvas}
-                saved={post.featured}
+                featured={post.featured}
                 author_id={post.author_id}
               />
-            ))
-          ) : (
-            <h2 className="posts">No posts found</h2>
-          )}
+            ))}
         </div>
       </div>
     </>

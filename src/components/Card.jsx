@@ -11,7 +11,6 @@ const Card = (props) => {
   const [nameData, setNameData] = useState(null);
 
   useEffect(() => {
-    // checkLiked();
     fetchUserData();
   }, []);
 
@@ -23,19 +22,46 @@ const Card = (props) => {
   };
 
   const toggleLike = async () => {
-    // Toggle the liked state
-    const newLikedState = !liked;
-    setLiked(newLikedState);
+    const user_id = nameData;
+    const post_id = props.id;
 
-    // Calculate the new likes count based on whether the user is liking or unliking
-    const newCount = newLikedState ? count + 1 : count - 1;
-    setCount(newCount);
+    const { data: existingLikes, error } = await supabase
+      .from("Likes")
+      .select("*")
+      .eq("user_id", user_id)
+      .eq("post_id", post_id);
 
-    // Update the likes in your database
-    await supabase
-      .from("Posts")
-      .update({ likes: props.likes + newCount })
-      .eq("id", props.id);
+    if (error) {
+      console.error("Error checking for existing like", error);
+      return;
+    }
+
+    if (existingLikes.length > 0) {
+      await supabase
+        .from("Likes")
+        .delete()
+        .match({ user_id: user_id, post_id: post_id });
+
+      await supabase
+        .from("Posts")
+        .update({ likes: props.likes - 1 })
+        .eq("id", props.id);
+
+      setLiked(false);
+      setCount(count - 1);
+    } else {
+      await supabase
+        .from("Likes")
+        .insert([{ user_id: user_id, post_id: post_id }]);
+
+      await supabase
+        .from("Posts")
+        .update({ likes: props.likes + 1 })
+        .eq("id", props.id);
+
+      setLiked(true);
+      setCount(count + 1);
+    }
   };
 
   const makeFeatured = async (event) => {
@@ -90,9 +116,11 @@ const Card = (props) => {
           👍 Likes: {props.likes + count}
         </button>
         {/* Allows Admins to feature a post */}
-        {/*  <button className="likeButton" onClick={makeFeatured}>
-          ⭐ Feature
-        </button> */}
+        {nameData == "9407454f-2697-47f5-8c32-1c8095d50fbd" && (
+          <button className="likeButton" onClick={makeFeatured}>
+            ⭐ Feature
+          </button>
+        )}
         <button
           className="likeButton"
           onClick={() => downloadImage(props.canvas)}

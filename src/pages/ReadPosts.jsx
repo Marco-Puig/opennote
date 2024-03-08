@@ -24,6 +24,7 @@ const ReadPosts = (props) => {
       {posts && posts.length > 0 ? (
         posts.map((post, index) => (
           <Card
+            key={index}
             id={post.id}
             title={post.title}
             author={post.author}
