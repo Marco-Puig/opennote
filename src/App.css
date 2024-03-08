@@ -1,11 +1,11 @@
 @font-face {
   font-family: "Pixel";
-  src: url(fonts/JosefinSans.ttf);
+  src: url(Fonts/JosefinSans.ttf);
 }
 
 @font-face {
   font-family: "Upheav";
-  src: url(fonts/JosefinSans.ttf);
+  src: url(Fonts/JosefinSans.ttf);
 }
 
 .App {
@@ -73,6 +73,6 @@ button:hover {
 
 
 .nav_links{
-  font-family: "Upheav";
+  font-family: "Pixel";
   font-size: 16px;
 }

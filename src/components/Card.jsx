@@ -21,6 +21,11 @@ const Card = (props) => {
   };
 
   const toggleLike = async () => {
+    if (!nameData) {
+      alert("Please sign in to like a post.");
+      return;
+    }
+
     const user_id = nameData;
     const post_id = props.id;
 

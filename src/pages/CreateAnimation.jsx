@@ -53,6 +53,8 @@ const CreateAnimation = () => {
         author: user.user_metadata.display_name,
         authorId: user.id,
       }));
+    } else {
+      window.location = "/opennote/signin";
     }
   };
 
