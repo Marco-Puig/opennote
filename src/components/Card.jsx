@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { supabase } from "../client";
 
 const Card = (props) => {
-  const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(0);
   const [nameData, setNameData] = useState(null);
 
@@ -47,7 +46,6 @@ const Card = (props) => {
         .update({ likes: props.likes - 1 })
         .eq("id", props.id);
 
-      setLiked(false);
       setCount(count - 1);
     } else {
       await supabase
@@ -59,7 +57,6 @@ const Card = (props) => {
         .update({ likes: props.likes + 1 })
         .eq("id", props.id);
 
-      setLiked(true);
       setCount(count + 1);
     }
   };
@@ -116,7 +113,7 @@ const Card = (props) => {
           👍 Likes: {props.likes + count}
         </button>
         {/* Allows Admins to feature a post */}
-        {nameData == "9407454f-2697-47f5-8c32-1c8095d50fbd" && (
+        {nameData === "9407454f-2697-47f5-8c32-1c8095d50fbd" && (
           <button className="likeButton" onClick={makeFeatured}>
             ⭐ Feature
           </button>

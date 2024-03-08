@@ -25,7 +25,9 @@ const CreateAnimation = () => {
   const [brushSize, setBrushSize] = useState(5); // Default brush size
   const [eraserSize, setEraserSize] = useState(5); // Default brush size
 
+  // eslint-disable-next-line
   const [undoStack, setUndoStack] = useState([]);
+  // eslint-disable-next-line
   const [redoStack, setRedoStack] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -60,16 +62,6 @@ const CreateAnimation = () => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  // Function to update frameDelay based on button click
-  const setFrameDelay = (delay) => {
-    setPost((prev) => ({
-      ...prev,
-      frameDelay: delay,
-    }));
-
-    createGIF();
   };
 
   const copyCanvas = () => {
@@ -380,6 +372,15 @@ const CreateAnimation = () => {
   const doubleRedo = () => {
     redo();
     setTimeout(redo, 0);
+  };
+
+  // Function to update frameDelay based on button click
+  const setFrameDelay = (delay) => {
+    setPost((prev) => ({
+      ...prev,
+      frameDelay: delay,
+    }));
+    createGIF();
   };
 
   // In your button:
