@@ -31,7 +31,6 @@ const EditPost = ({ data }) => {
       .from("Posts")
       .update({
         title: post.title,
-        author: post.author,
         description: post.description,
       })
       .eq("id", actualId);
@@ -49,27 +48,16 @@ const EditPost = ({ data }) => {
 
   return (
     <div>
-      <form>
+      <form onSubmit={updatePost}>
         <label for="title">Title</label> <br />
         <input
           type="text"
           id="title"
           name="title"
+          required
           value={post.title}
           onChange={handleChange}
         />
-        <br />
-        <br />
-        <label for="author">Author</label>
-        <br />
-        <input
-          type="text"
-          id="author"
-          name="author"
-          value={post.author}
-          onChange={handleChange}
-        />
-        <br />
         <br />
         <label htmlFor="description">Description</label>
         <br />
@@ -78,10 +66,12 @@ const EditPost = ({ data }) => {
           cols="50"
           id="description"
           name="description"
+          required
+          value={post.description}
           onChange={handleChange}
         ></textarea>
         <br />
-        <input type="submit" value="Update" onClick={updatePost} />
+        <input type="submit" value="Update" />
         <button className="deleteButton" onClick={deletePost}>
           Delete
         </button>
