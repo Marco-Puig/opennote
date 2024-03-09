@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../client";
 
 function SignUp() {
@@ -7,6 +7,23 @@ function SignUp() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // If user is already logged in, redirect to /opennote
+    fetchUserData();
+  });
+
+  const fetchUserData = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    setUserData(user.id);
+
+    if (userData) {
+      window.location.href = "/opennote";
+    }
+  };
 
   const handleSignUp = async (e) => {
     e.preventDefault();

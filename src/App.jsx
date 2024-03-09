@@ -29,7 +29,7 @@ const App = () => {
       if (error) {
         console.error("Error fetching user:", error.message);
         handleSignout();
-      } else setUserData(user);
+      } else if (user) setUserData(user);
     };
 
     fetchUser();

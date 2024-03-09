@@ -11,21 +11,24 @@ const Card = (props) => {
 
   useEffect(() => {
     fetchUserData();
+    setCount(0);
   }, []);
 
   const fetchUserData = async () => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    setNameData(user.id);
+    if (user) setNameData(user.id);
   };
 
   const toggleLike = async () => {
+    // if user isnt logged in...
     if (!nameData) {
-      alert("Please sign in to like a post.");
+      window.location.href = "/opennote/signin";
       return;
     }
 
+    // if user is logged in, if they liked the post, remove like, else add like
     const user_id = nameData;
     const post_id = props.id;
 

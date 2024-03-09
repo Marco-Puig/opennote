@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "../client";
 import { Link } from "react-router-dom";
 
@@ -7,6 +7,23 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // If user is already logged in, redirect to /opennote
+    fetchUserData();
+  });
+
+  const fetchUserData = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) setUserData(user.id);
+
+    if (userData) {
+      window.location.href = "/opennote";
+    }
+  };
 
   const handleSignIn = async (e) => {
     e.preventDefault();
