@@ -34,6 +34,8 @@ const CreateAnimation = () => {
 
   const [audioFile, setAudioFile] = useState(null);
 
+  const [brush, setBrush] = useState(true);
+
   const height = 595;
   const width = 680;
 
@@ -366,8 +368,10 @@ const CreateAnimation = () => {
           setRedoStack([]);
 
           // Set drawing color and size
-          context.strokeStyle = event.button === 2 ? "white" : currentColor; // Right-click for eraser
-          context.lineWidth = event.button === 2 ? eraserSize : brushSize; // Right-click for eraser
+          context.strokeStyle =
+            event.button === 2 || !brush ? "white" : currentColor; // Right-click for eraser
+          context.lineWidth =
+            event.button === 2 || !brush ? eraserSize : brushSize; // Right-click for eraser
 
           isDrawing = true;
           startDrawing(canvas, context, offsetX, offsetY);
@@ -422,6 +426,7 @@ const CreateAnimation = () => {
     undo,
     redo,
     post.canvases.length,
+    brush,
   ]);
 
   const doubleRedo = () => {
@@ -435,6 +440,10 @@ const CreateAnimation = () => {
       ...prev,
       frameDelay: delay,
     }));
+  };
+
+  const changeBrushEraser = () => {
+    setBrush(!brush);
   };
 
   // In your button:
@@ -493,6 +502,9 @@ const CreateAnimation = () => {
         <div className="button-group">
           <label>Edit Tools:</label>
           <div>
+            <button type="button" onClick={changeBrushEraser}>
+              {brush ? "Eraser" : "Brush"}
+            </button>
             <button type="button" onClick={addCanvas}>
               Add Frame
             </button>
