@@ -39,8 +39,6 @@ const CreateAnimation = () => {
   const height = 595;
   const width = 680;
 
-  const [zoomToggled, setZoomToggled] = useState(false);
-
   window.Buffer = Buffer;
 
   // This useEffect ensures that canvasRefs.current always has the same length as post.canvases
@@ -163,6 +161,7 @@ const CreateAnimation = () => {
     return new Promise(async (resolve, reject) => {
       if (post.canvases.length === 0) {
         alert("Please add at least one frame.");
+        setLoading(false);
         reject("No frames added.");
         return;
       }
@@ -414,7 +413,6 @@ const CreateAnimation = () => {
     undo,
     redo,
     post.canvases.length,
-    zoomToggled,
   ]);
 
   const doubleRedo = () => {
@@ -428,11 +426,6 @@ const CreateAnimation = () => {
       ...prev,
       frameDelay: delay,
     }));
-    createGIF();
-  };
-
-  const zoomFunc = () => {
-    setZoomToggled(!zoomToggled);
   };
 
   // In your button:
@@ -508,9 +501,6 @@ const CreateAnimation = () => {
             <button type="button" onClick={doubleRedo}>
               Redo
             </button>
-            <button type="button" onClick={zoomFunc}>
-              Zoom {zoomToggled ? "Out" : "In"}
-            </button>
           </div>
         </div>
 
@@ -567,6 +557,7 @@ const CreateAnimation = () => {
               )}
             </div>
             <div>
+              <div>{showGifPreview && <label>Framerate Settings:</label>}</div>
               {showGifPreview &&
                 [100, 200, 300, 400, 1000, 5000].map((delay, index) => {
                   const durations = ["1s", "2s", "3s", "4s", "10s", "50s"];
@@ -575,11 +566,20 @@ const CreateAnimation = () => {
                       key={delay}
                       onClick={() => setFrameDelay(delay)}
                       type="button"
+                      style={{
+                        backgroundColor:
+                          post.frameDelay === delay ? "#6a0dad" : "#773193",
+                      }}
                     >
                       {durations[index]}
                     </button>
                   );
                 })}
+              {showGifPreview && (
+                <button onClick={createGIF} type="button">
+                  Confirm Framerate
+                </button>
+              )}
             </div>
           </div>
           {gifUrl && showGifPreview && (
