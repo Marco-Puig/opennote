@@ -11,7 +11,7 @@ const CreateAnimation = () => {
     author: "",
     description: "",
     canvases: [],
-    frameDelay: 500,
+    frameDelay: 400,
     authorId: "",
   });
   const canvasRefs = useRef([]);
@@ -24,8 +24,6 @@ const CreateAnimation = () => {
 
   const [brushSize, setBrushSize] = useState(5); // Default brush size
   const [eraserSize, setEraserSize] = useState(5); // Default brush size
-
-  const [audioURL, setAudioURL] = useState("");
 
   // eslint-disable-next-line
   const [undoStack, setUndoStack] = useState([]);
@@ -245,21 +243,32 @@ const CreateAnimation = () => {
 
       //update the post object with the public URL of the audio
       // Upload the audio file if it exists and is within the size limit
-      if (audioFile) {
-        const fileAudioName = `audio_${Date.now()}-post.${
-          audioFile.type.split("/")[1]
-        }`; // Construct file name with proper extension
-        const { error: uploadAudioError } = await supabase.storage
-          .from("audio")
-          .upload(fileAudioName, audioFile);
-
-        if (uploadAudioError && audioFile) {
-          throw uploadAudioError;
-        }
-        // Construct the public URL for the uploaded audio
-        const publicAudioURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/audio/${fileAudioName}`;
-        setAudioURL(publicAudioURL);
+      if (!audioFile) {
+        // Save the post details along with the public URL of the GIF in the database
+        await supabase.from("Posts").insert({
+          title: post.title,
+          author: post.author,
+          description: post.description,
+          canvas: publicGIFURL, // Save the public URL to the database for later retrieval
+          author_id: post.authorId,
+        });
+        window.location = "/opennote"; // Redirect to the home page after creating the post
+        return;
       }
+
+      const fileAudioName = `audio_${Date.now()}-post.${
+        audioFile.type.split("/")[1]
+      }`; // Construct file name with proper extension
+      const { error: uploadAudioError } = await supabase.storage
+        .from("audio")
+        .upload(fileAudioName, audioFile);
+
+      if (uploadAudioError && audioFile) {
+        throw uploadAudioError;
+      }
+      // Construct the public URL for the uploaded audio
+      const publicAudioURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/audio/${fileAudioName}`;
+
       // Save the post details along with the public URL of the GIF in the database
       await supabase.from("Posts").insert({
         title: post.title,
@@ -267,7 +276,7 @@ const CreateAnimation = () => {
         description: post.description,
         canvas: publicGIFURL, // Save the public URL to the database for later retrieval
         author_id: post.authorId,
-        audio: audioURL,
+        audio: publicAudioURL,
       });
 
       window.location = "/opennote"; // Redirect to the home page after creating the post

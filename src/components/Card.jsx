@@ -76,7 +76,7 @@ const Card = (props) => {
     await supabase.from("Posts").update({ featured: true }).eq("id", props.id);
   };
 
-  async function downloadImage(imageSrc) {
+  async function downloadImage(imageSrc, audioSrc) {
     const image = await fetch(imageSrc);
     const imageBlog = await image.blob();
     const imageURL = URL.createObjectURL(imageBlog);
@@ -87,6 +87,19 @@ const Card = (props) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    if (!audioSrc) return;
+
+    const audio = await fetch(audioSrc);
+    const audioBlog = await audio.blob();
+    const audioURL = URL.createObjectURL(audioBlog);
+
+    const audiolink = document.createElement("a");
+    audiolink.href = audioURL;
+    audiolink.download = "audio.mp3";
+    document.body.appendChild(audiolink);
+    audiolink.click();
+    document.body.removeChild(audiolink);
   }
 
   const playAudio = () => {
@@ -160,7 +173,7 @@ const Card = (props) => {
         )}
         <button
           className="likeButton"
-          onClick={() => downloadImage(props.canvas)}
+          onClick={() => downloadImage(props.canvas, props.audio)}
         >
           💾 Save
         </button>
