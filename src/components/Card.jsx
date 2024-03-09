@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import "./Card.css";
 import more from "./more.png";
@@ -8,9 +8,11 @@ import { supabase } from "../client";
 const Card = (props) => {
   const [count, setCount] = useState(0);
   const [nameData, setNameData] = useState(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     fetchUserData();
+    // reset count on refresh (count is used to update the like count without refreshing the page)
     setCount(0);
   }, []);
 
@@ -87,8 +89,38 @@ const Card = (props) => {
     document.body.removeChild(link);
   }
 
+  const playAudio = () => {
+    if (audioRef.current) {
+      audioRef.current
+        .play()
+        .then(() => console.log("Audio playing"))
+        .catch((error) => console.error("Error playing audio:", error));
+    }
+  };
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      // Reset the audio to the start
+      audioRef.current.currentTime = 0;
+    }
+  };
+  useEffect(() => {
+    // Initialize the audio element when the component mounts or when props.audio changes.
+    audioRef.current = new Audio(props.audio);
+    audioRef.current.volume = 0.5;
+
+    return () => {
+      // Cleanup audio element to avoid memory leaks
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [props.audio]);
+
   return (
-    <div className="Card">
+    <div className="Card" onMouseEnter={playAudio} onMouseLeave={stopAudio}>
       <div className="Card-header">
         <div className="Header-edit-button">
           <Link to={"/opennote/community/edit/:id" + props.id}>

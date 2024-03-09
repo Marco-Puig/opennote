@@ -25,6 +25,8 @@ const CreateAnimation = () => {
   const [brushSize, setBrushSize] = useState(5); // Default brush size
   const [eraserSize, setEraserSize] = useState(5); // Default brush size
 
+  const [audioURL, setAudioURL] = useState("");
+
   // eslint-disable-next-line
   const [undoStack, setUndoStack] = useState([]);
   // eslint-disable-next-line
@@ -32,8 +34,12 @@ const CreateAnimation = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const width = 600;
-  const height = 525;
+  const [audioFile, setAudioFile] = useState(null);
+
+  const height = 595;
+  const width = 680;
+
+  const [zoomToggled, setZoomToggled] = useState(false);
 
   window.Buffer = Buffer;
 
@@ -195,6 +201,25 @@ const CreateAnimation = () => {
     });
   };
 
+  const handleAudioChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Check if the file is an MP3 by looking at its MIME type
+      if (file.type !== "audio/mpeg") {
+        alert("Please select an MP3 file.");
+        return; // Exit the function if the file is not an MP3
+      }
+
+      // Proceed with size checking and setting the file
+      if (file.size > 8 * 1024 * 1024) {
+        // 8 MB limit
+        alert("File size should not exceed 8 MB.");
+      } else {
+        setAudioFile(file);
+      }
+    }
+  };
+
   const createPost = async (event) => {
     event.preventDefault();
 
@@ -204,26 +229,46 @@ const CreateAnimation = () => {
       const blob = await createGIF(); // Wait for the GIF creation to finish
       setShowGifPreview(false); // Hide the GIF preview after creating the post
 
+      // Update the post object with the public URL of the GIF
       // Upload the blob to Supabase Storage
-      const fileName = `gifs_${Date.now()}-post.gif`; // Unique file name
-      const { error: uploadError } = await supabase.storage
-        .from("animations")
-        .upload(fileName, blob);
+      const fileGIFName = `gifs_${Date.now()}-post.gif`; // Unique file name
 
-      if (uploadError) {
-        throw uploadError;
+      const { error: uploadGIFError } = await supabase.storage
+        .from("animations")
+        .upload(fileGIFName, blob);
+
+      if (uploadGIFError) {
+        throw uploadGIFError;
       }
 
       // Get the public URL of the uploaded file
-      const publicURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/animations/${fileName}`;
+      const publicGIFURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/animations/${fileGIFName}`;
 
+      //update the post object with the public URL of the audio
+      // Upload the audio file if it exists and is within the size limit
+      if (audioFile) {
+        const fileAudioName = `audio_${Date.now()}-post.${
+          audioFile.type.split("/")[1]
+        }`; // Construct file name with proper extension
+        const { error: uploadAudioError } = await supabase.storage
+          .from("audio")
+          .upload(fileAudioName, audioFile);
+
+        if (uploadAudioError && audioFile) {
+          throw uploadAudioError;
+        }
+        // Construct the public URL for the uploaded audio
+        const publicAudioURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/audio/${fileAudioName}`;
+        setAudioURL(publicAudioURL);
+      }
       // Save the post details along with the public URL of the GIF in the database
       await supabase.from("Posts").insert({
         title: post.title,
         author: post.author,
         description: post.description,
-        canvas: publicURL, // Save the public URL to the database for later retrieval
+        canvas: publicGIFURL, // Save the public URL to the database for later retrieval
         author_id: post.authorId,
+        audio: audioURL,
       });
 
       window.location = "/opennote"; // Redirect to the home page after creating the post
@@ -369,6 +414,7 @@ const CreateAnimation = () => {
     undo,
     redo,
     post.canvases.length,
+    zoomToggled,
   ]);
 
   const doubleRedo = () => {
@@ -383,6 +429,10 @@ const CreateAnimation = () => {
       frameDelay: delay,
     }));
     createGIF();
+  };
+
+  const zoomFunc = () => {
+    setZoomToggled(!zoomToggled);
   };
 
   // In your button:
@@ -458,9 +508,9 @@ const CreateAnimation = () => {
             <button type="button" onClick={doubleRedo}>
               Redo
             </button>
-            {/*<button type="button" onClick={zoomFunc}>
+            <button type="button" onClick={zoomFunc}>
               Zoom {zoomToggled ? "Out" : "In"}
-            </button>*/}
+            </button>
           </div>
         </div>
 
@@ -539,6 +589,15 @@ const CreateAnimation = () => {
               style={{ backgroundColor: "white" }}
             />
           )}
+        </div>
+        <div>
+          <label htmlFor="audio">Upload Audio (MP3, Max 8MB)</label>
+          <input
+            type="file"
+            id="audio"
+            accept="audio/*"
+            onChange={handleAudioChange}
+          />
         </div>
         <div className="form-group">
           <input

@@ -34,6 +34,7 @@ const ReadPosts = (props) => {
             canvas={post.canvas}
             featured={post.featured}
             author_id={post.author_id}
+            audio={post.audio}
           />
         ))
       ) : (
