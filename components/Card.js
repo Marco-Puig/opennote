@@ -16,10 +16,6 @@ const Card = (props) => {
         <View style={styles.headerContent}>
           <Text style={styles.title}>{props.title}</Text>
           {props.featured && <Text style={styles.tagFeatured}>Featured</Text>}
-          <Text style={styles.author}>{"by " + props.author}</Text>
-          <Text style={styles.author}>
-            {"Posted: " + props.date.slice(0, 10)}
-          </Text>
           <Text style={styles.description}>{props.description}</Text>
           <Image
             style={styles.canvas}
@@ -27,6 +23,10 @@ const Card = (props) => {
               uri: props.canvas,
             }}
           />
+          <Text style={styles.author}>{"by " + props.author}</Text>
+          <Text style={styles.author}>
+            {"Posted: " + props.date.slice(0, 10)}
+          </Text>
         </View>
       </View>
     </View>
