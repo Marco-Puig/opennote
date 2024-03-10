@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, Dimensions } from "react-native";
 import Card from "../components/Card";
 import { supabase } from "../client";
 

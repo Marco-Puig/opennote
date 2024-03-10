@@ -6,15 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Dimensions,
 } from "react-native";
-//import { supabase } from "../client";
-//import { useNavigation } from "@react-navigation/native";
 
 const Card = (props) => {
-  const [count, setCount] = useState(0);
-  const [nameData, setNameData] = useState(null);
-  //const navigation = useNavigation();
-
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
@@ -40,37 +35,59 @@ const Card = (props) => {
 
 const styles = StyleSheet.create({
   card: {
-    // Define your card container styles here
-  },
-  cardHeader: {
-    // Styles for the card header
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignSelf: "center",
+    width: "100%", // Card takes up full width of the screen
+    height: Dimensions.get("window").height * 0.75, // Adjust this value as needed
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+    overflow: "hidden",
   },
   headerContent: {
-    // Styles for the header content
+    alignItems: "center", // Aligns content items to the center
+    padding: 10,
   },
   title: {
-    // Styles for the title
+    fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
   },
   tagFeatured: {
-    // Styles for the featured tag
+    fontWeight: "bold",
+    color: "blue",
+    marginTop: 6,
+    alignSelf: "center",
   },
   author: {
-    // Styles for the author
+    color: "gray",
+    marginTop: 4,
+    textAlign: "center",
   },
   description: {
-    // Styles for the description
+    marginTop: 4,
+    textAlign: "center",
   },
   canvas: {
-    // Styles for the canvas image
+    width: "100%", // The image will take the full width of the card
+    height: undefined, // The height is calculated based on the width and aspect ratio
+    aspectRatio: 1, // The aspect ratio of 1:1 makes the image a square
+    alignSelf: "center",
   },
   buttonArea: {
-    // Styles for the button area
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
   },
   likeButton: {
-    // Styles for the like button
+    // Style for the like button
   },
   moreButton: {
-    // Styles for the more button
+    // Style for the more options button
   },
 });
+
 export default Card;

@@ -1,14 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import ReadPosts from "./pages/ReadPosts";
 import { supabase } from "./client";
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ReadPosts />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
