@@ -1,18 +1,17 @@
-import React, { useEffect, useRef } from "react";
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./Card.css";
 import more from "./more.png";
-import { Link } from "react-router-dom";
 import { supabase } from "../client";
 
 const Card = (props) => {
   const [count, setCount] = useState(0);
   const [nameData, setNameData] = useState(null);
   const audioRef = useRef(null);
+  const gifRef = useRef(null);
 
   useEffect(() => {
     fetchUserData();
-    // reset count on refresh (count is used to update the like count without refreshing the page)
     setCount(0);
   }, []);
 
@@ -103,6 +102,7 @@ const Card = (props) => {
   }
 
   const playAudio = () => {
+    restartGif();
     if (audioRef.current) {
       audioRef.current
         .play()
@@ -132,6 +132,13 @@ const Card = (props) => {
     };
   }, [props.audio]);
 
+  // Function to restart the GIF using useRef
+  const restartGif = () => {
+    const currentSrc = gifRef.current.src;
+    gifRef.current.src = ""; // Force the image to unload
+    gifRef.current.src = currentSrc; // Reset the src to force reload
+  };
+
   return (
     <div className="Card" onMouseEnter={playAudio} onMouseLeave={stopAudio}>
       <div className="Card-header">
@@ -150,9 +157,9 @@ const Card = (props) => {
           <p className="description">{props.description}</p>
         </div>
       </div>
-
       <a href={props.canvas} target="_blank" rel="noopener noreferrer">
         <img
+          ref={gifRef}
           className="canvas"
           width="400"
           height="350"
