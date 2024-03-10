@@ -210,8 +210,8 @@ const CreateAnimation = () => {
       }
 
       // Proceed with size checking and setting the file
-      if (file.size > 8 * 1024 * 1024) {
-        // 8 MB limit
+      if (file.size > 4 * 1024 * 1024) {
+        // 4 MB limit
         alert("File size should not exceed 8 MB.");
       } else {
         setAudioFile(file);
@@ -612,7 +612,7 @@ const CreateAnimation = () => {
           )}
         </div>
         <div>
-          <label htmlFor="audio">Upload Audio (MP3, Max 8MB)</label>
+          <label htmlFor="audio">Upload Audio (MP3, Max 4MB)</label>
           <input
             type="file"
             id="audio"
