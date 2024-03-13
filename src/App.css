@@ -1,11 +1,6 @@
 @font-face {
   font-family: "Pixel";
-  src: url(Fonts/JosefinSans.ttf);
-}
-
-@font-face {
-  font-family: "Upheav";
-  src: url(Fonts/JosefinSans.ttf);
+  src: url(fonts/JosefinSans.ttf);
 }
 
 .App {
