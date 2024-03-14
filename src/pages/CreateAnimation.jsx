@@ -5,7 +5,7 @@ import { supabase } from "../client";
 import { Buffer } from "buffer";
 import { SketchPicker } from "react-color";
 
-const CreateAnimation = () => {
+const CreateAnimation = (props) => {
   const [post, setPost] = useState({
     title: "",
     author: "",
@@ -36,16 +36,48 @@ const CreateAnimation = () => {
 
   const [brush, setBrush] = useState(true);
 
+  const [saving, setSaving] = useState(false);
+
   const height = 595;
   const width = 680;
 
   window.Buffer = Buffer;
 
   // This useEffect ensures that canvasRefs.current always has the same length as post.canvases
+  // load in frames if coming from a Draft to edit
   useEffect(() => {
     canvasRefs.current = canvasRefs.current.slice(0, post.canvases.length);
     fetchUserData();
-  }, [post.canvases.length]);
+    const restoreFrames = () => {
+      if (!props.images) {
+        return;
+      }
+
+      const convertedImages = props.images.map((image) => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        const img = new Image();
+        img.src = image;
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          context.drawImage(img, 0, 0);
+        };
+        return canvas;
+      });
+
+      for (let i = 0; i < convertedImages.length; i++) {
+        addCanvas();
+        const currentCanvas = canvasRefs.current[i].getContext("2d");
+        currentCanvas.putImageData(
+          convertedImages[i].getContext("2d").getImageData(0, 0, width, height),
+          0,
+          0
+        );
+      }
+    };
+    restoreFrames();
+  }, [post.canvases.length, props.images]);
 
   const fetchUserData = async () => {
     const {
@@ -68,6 +100,29 @@ const CreateAnimation = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const uploadDraft = async (event) => {
+    event.preventDefault();
+
+    setSaving(true);
+
+    try {
+      const canvasDataUrls = canvasRefs.current.map((canvas) =>
+        canvas.toDataURL()
+      );
+
+      await supabase.from("Drafts").insert({
+        title: post.title,
+        description: post.description,
+        images: canvasDataUrls,
+        author_id: post.authorId,
+      });
+    } catch (error) {
+      console.error("Failed to save draft:", error);
+    }
+
+    setSaving(false);
   };
 
   const copyCanvas = () => {
@@ -576,6 +631,13 @@ const CreateAnimation = () => {
                   Refresh Preview
                 </button>
               )}
+              <button onClick={uploadDraft} type="button">
+                {saving
+                  ? "Saving..."
+                  : post.canvases.length > 1
+                  ? "Save Draft"
+                  : "Save Animation Draft"}
+              </button>
             </div>
             <div>
               <div>{showGifPreview && <label>Framerate Settings:</label>}</div>

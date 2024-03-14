@@ -1,15 +1,17 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import { useRoutes } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { supabase } from "./client";
 import ReadPosts from "./pages/ReadPosts";
 import ReadFeatures from "./pages/ReadFeatures";
 import CreateAnimation from "./pages/CreateAnimation";
 import EditPost from "./pages/EditPost";
 import Profile from "./pages/Profile";
-import { Link } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import { supabase } from "./client";
+import Drafts from "./pages/ReadDrafts";
+import EditDraft from "./pages/EditDraft";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -50,6 +52,10 @@ const App = () => {
       element: <EditPost data={posts} />,
     },
     {
+      path: "/opennote/community/editdraft/:id",
+      element: <EditDraft data={posts} />,
+    },
+    {
       path: "/opennote/new",
       element: <CreateAnimation />,
     },
@@ -64,6 +70,10 @@ const App = () => {
     {
       path: "/opennote/profile",
       element: <Profile data={posts} />,
+    },
+    {
+      path: "/opennote/drafts",
+      element: <Drafts data={posts} />,
     },
   ]);
 
@@ -96,6 +106,9 @@ const App = () => {
               <Link to="/opennote/profile">
                 <button className="headerBtn"> Profile 👤 </button>
               </Link>
+              <Link to="/opennote/drafts">
+                <button className="headerBtn"> Drafts 📝 </button>
+              </Link>
               <Link to="/opennote">
                 <button className="headerBtn" onClick={handleSignout}>
                   Sign Out 🔴
@@ -109,9 +122,9 @@ const App = () => {
               </Link>
             </>
           )}
-          {/*<a href="https://ko-fi.com/marcopuig">
-            <button className="headerBtn"> Support Us ❤️</button>
-          </a> */}
+          <a href="https://ko-fi.com/marcopuig">
+            <button className="headerBtn"> Donate ❤️</button>
+          </a>
         </div>
       </div>
       {element}
