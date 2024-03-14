@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import "./EditPost.css";

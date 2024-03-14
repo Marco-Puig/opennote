@@ -48,7 +48,7 @@ const CreateAnimation = (props) => {
   useEffect(() => {
     canvasRefs.current = canvasRefs.current.slice(0, post.canvases.length);
     fetchUserData();
-    const restoreFrames = () => {
+    const restoreFrames = async () => {
       if (!props.images) {
         return;
       }
@@ -66,9 +66,9 @@ const CreateAnimation = (props) => {
         return canvas;
       });
 
-      for (let i = 0; i < convertedImages.length; i++) {
-        addCanvas();
-        const currentCanvas = canvasRefs.current[i].getContext("2d");
+      for (let i = 0; i <= convertedImages.length; i++) {
+        await addCanvas();
+        const currentCanvas = await canvasRefs.current[i].getContext("2d");
         currentCanvas.putImageData(
           convertedImages[i].getContext("2d").getImageData(0, 0, width, height),
           0,
@@ -76,7 +76,6 @@ const CreateAnimation = (props) => {
         );
       }
     };
-    restoreFrames();
   }, [post.canvases.length, props.images]);
 
   const fetchUserData = async () => {
@@ -89,6 +88,7 @@ const CreateAnimation = (props) => {
         author: user.user_metadata.display_name,
         authorId: user.id,
       }));
+      restoreFrames();
     } else {
       window.location = "/opennote/signin";
     }

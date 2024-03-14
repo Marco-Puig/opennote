@@ -66,6 +66,7 @@ const ReadDrafts = (props) => {
                 description={post.description}
                 featured={post.featured}
                 author_id={post.author_id}
+                images={post.images}
               />
             ))}
           {posts && posts.length === 0 && (

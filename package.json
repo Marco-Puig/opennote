@@ -1,6 +1,6 @@
 {
   "homepage": "https://marco-puig.github.io/opennote",
-  "name": "openote",
+  "name": "opennote",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

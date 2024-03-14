@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./EditPost.css";
 import { supabase } from "../client";
@@ -23,6 +24,9 @@ const EditPost = ({ data }) => {
         <button className="deleteButton" onClick={deleteDraft}>
           Delete Draft
         </button>
+        <Link to="/opennote/drafts">
+          <button className="backButton"> Back </button>
+        </Link>
       </form>
     </div>
   );
