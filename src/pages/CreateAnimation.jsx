@@ -44,39 +44,39 @@ const CreateAnimation = (props) => {
   window.Buffer = Buffer;
 
   // This useEffect ensures that canvasRefs.current always has the same length as post.canvases
-  // load in frames if coming from a Draft to edit
   useEffect(() => {
     canvasRefs.current = canvasRefs.current.slice(0, post.canvases.length);
     fetchUserData();
-    const restoreFrames = async () => {
-      if (!props.images) {
-        return;
-      }
+  }, [post.canvases.length]);
 
-      const convertedImages = props.images.map((image) => {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
+  // load in frames if coming from a Draft
+  useEffect(() => {
+    // Function to create a canvas from an image URL
+    const createCanvasFromImage = (imageUrl, index) => {
+      return new Promise((resolve, reject) => {
         const img = new Image();
-        img.src = image;
         img.onload = () => {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          context.drawImage(img, 0, 0);
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width; // Or set to a specific size
+          canvas.height = img.height; // Or set to a specific size
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          resolve({ canvas, index });
         };
-        return canvas;
+        img.onerror = reject;
+        img.src = imageUrl;
       });
-
-      for (let i = 0; i <= convertedImages.length; i++) {
-        await addCanvas();
-        const currentCanvas = await canvasRefs.current[i].getContext("2d");
-        currentCanvas.putImageData(
-          convertedImages[i].getContext("2d").getImageData(0, 0, width, height),
-          0,
-          0
-        );
-      }
     };
-  }, [post.canvases.length, props.images]);
+
+    // Only proceed if props.images is not empty
+    if (props.images && props.images.length > 0) {
+      // Convert all image URLs to canvases
+      setPost((prev) => ({
+        ...prev,
+        canvases: [...prev.canvases, null],
+      }));
+    }
+  }, [props.images]); // Depend on props.images to rerun this effect
 
   const fetchUserData = async () => {
     const {
@@ -88,7 +88,6 @@ const CreateAnimation = (props) => {
         author: user.user_metadata.display_name,
         authorId: user.id,
       }));
-      restoreFrames();
     } else {
       window.location = "/opennote/signin";
     }
@@ -535,8 +534,7 @@ const CreateAnimation = (props) => {
             onChange={handleChange}
           />
         </div>
-
-        {post.canvases.map((_, index) => (
+        {post.canvases.map((canvas, index) => (
           <div key={index} className="canvas-container">
             <label>Frame: {index + 1}</label>
             <br />

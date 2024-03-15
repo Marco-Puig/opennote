@@ -106,8 +106,7 @@ const Card = (props) => {
     if (audioRef.current) {
       audioRef.current
         .play()
-        .then(() => console.log("Audio playing"))
-        .catch((error) => console.error("Error playing audio:", error));
+        .catch((e) => console.warn("Post does not contain audio:" + e));
     }
   };
 

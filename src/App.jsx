@@ -103,11 +103,11 @@ const App = () => {
           )}
           {userData ? (
             <>
-              <Link to="/opennote/profile">
-                <button className="headerBtn"> Profile 👤 </button>
-              </Link>
               <Link to="/opennote/drafts">
                 <button className="headerBtn"> Drafts 📝 </button>
+              </Link>
+              <Link to="/opennote/profile">
+                <button className="headerBtn"> Profile 👤 </button>
               </Link>
               <Link to="/opennote">
                 <button className="headerBtn" onClick={handleSignout}>

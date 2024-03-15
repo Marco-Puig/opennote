@@ -13,7 +13,7 @@ const EditPost = ({ data }) => {
 
     await supabase.from("Drafts").delete().eq("id", actualId);
 
-    window.location = "/opennote/";
+    window.location = "/opennote/drafts";
   };
 
   return (
