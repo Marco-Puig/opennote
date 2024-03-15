@@ -38,6 +38,10 @@ const CreateAnimation = (props) => {
 
   const [saving, setSaving] = useState(false);
 
+  const [saved, setSaved] = useState(false);
+
+  const [loadedImages, setLoadedImages] = useState(false);
+
   const height = 595;
   const width = 680;
 
@@ -51,32 +55,45 @@ const CreateAnimation = (props) => {
 
   // load in frames if coming from a Draft
   useEffect(() => {
-    // Function to create a canvas from an image URL
-    const createCanvasFromImage = (imageUrl, index) => {
+    const createCanvasFromImage = (imageUrl) => {
       return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement("canvas");
-          canvas.width = img.width; // Or set to a specific size
-          canvas.height = img.height; // Or set to a specific size
+          canvas.width = img.width;
+          canvas.height = img.height;
           const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0);
-          resolve({ canvas, index });
+          resolve(canvas);
         };
-        img.onerror = reject;
+        img.onerror = () =>
+          reject(new Error(`Failed to load image at ${imageUrl}`));
         img.src = imageUrl;
       });
     };
 
-    // Only proceed if props.images is not empty
     if (props.images && props.images.length > 0) {
-      // Convert all image URLs to canvases
-      setPost((prev) => ({
-        ...prev,
-        canvases: [...prev.canvases, null],
-      }));
+      const loadImages = async () => {
+        for (let i = 0; i < props.images.length; i++) {
+          addCanvas();
+          const imageUrl = props.images[i];
+          const canvas = await createCanvasFromImage(imageUrl);
+          // Assuming canvasRefs.current is an array of references to existing canvases
+          if (canvasRefs.current[i]) {
+            canvasRefs.current[i].replaceWith(canvas); // Replace existing canvas with new one
+            canvasRefs.current[i] = canvas; // Update reference
+          } else {
+            // Handle case where canvasRefs.current[i] doesn't exist yet
+            console.log("No existing canvas reference to replace");
+          }
+          setLoadedImages(true);
+        }
+      };
+      loadImages();
     }
-  }, [props.images]); // Depend on props.images to rerun this effect
+  }, [props.images]);
 
   const fetchUserData = async () => {
     const {
@@ -103,7 +120,7 @@ const CreateAnimation = (props) => {
 
   const uploadDraft = async (event) => {
     event.preventDefault();
-
+    setSaved(false);
     setSaving(true);
 
     try {
@@ -122,6 +139,7 @@ const CreateAnimation = (props) => {
     }
 
     setSaving(false);
+    setSaved(true);
   };
 
   const copyCanvas = () => {
@@ -629,13 +647,19 @@ const CreateAnimation = (props) => {
                   Refresh Preview
                 </button>
               )}
-              <button onClick={uploadDraft} type="button">
-                {saving
-                  ? "Saving..."
-                  : post.canvases.length > 1
-                  ? "Save Draft"
-                  : "Save Animation Draft"}
-              </button>
+              {!loadedImages && (
+                <button onClick={uploadDraft} type="button">
+                  {saving
+                    ? "Saving..."
+                    : post.canvases.length > 1
+                    ? saved
+                      ? "Saved!"
+                      : "Save Draft"
+                    : saved
+                    ? "Saved!"
+                    : "Save Animation Draft"}
+                </button>
+              )}
             </div>
             <div>
               <div>{showGifPreview && <label>Framerate Settings:</label>}</div>
