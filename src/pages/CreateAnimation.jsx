@@ -77,7 +77,10 @@ const CreateAnimation = (props) => {
     if (props.images && props.images.length > 0) {
       const loadImages = async () => {
         for (let i = 0; i < props.images.length; i++) {
-          addCanvas();
+          setPost((prev) => ({
+            ...prev,
+            canvases: props.images.map(() => [null]), // Initialize canvases with nulls
+          }));
           const imageUrl = props.images[i];
           const canvas = await createCanvasFromImage(imageUrl);
           // Assuming canvasRefs.current is an array of references to existing canvases
