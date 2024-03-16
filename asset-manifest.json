@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/opennote/static/css/main.5b4ec35c.css",
-    "main.js": "/opennote/static/js/main.25f3fc10.js",
+    "main.js": "/opennote/static/js/main.87f33293.js",
     "static/js/289.622ad87f.chunk.js": "/opennote/static/js/289.622ad87f.chunk.js",
     "static/media/JosefinSans.ttf": "/opennote/static/media/JosefinSans.613585db06f849ca7717.ttf",
     "static/media/more.png": "/opennote/static/media/more.b1d4972864aba11f95a9.png",
     "index.html": "/opennote/index.html",
     "main.5b4ec35c.css.map": "/opennote/static/css/main.5b4ec35c.css.map",
-    "main.25f3fc10.js.map": "/opennote/static/js/main.25f3fc10.js.map",
+    "main.87f33293.js.map": "/opennote/static/js/main.87f33293.js.map",
     "289.622ad87f.chunk.js.map": "/opennote/static/js/289.622ad87f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5b4ec35c.css",
-    "static/js/main.25f3fc10.js"
+    "static/js/main.87f33293.js"
   ]
 }
