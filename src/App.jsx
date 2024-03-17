@@ -12,6 +12,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Drafts from "./pages/ReadDrafts";
 import EditDraft from "./pages/EditDraft";
+import Comments from "./pages/Comments";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -50,6 +51,10 @@ const App = () => {
     {
       path: "/opennote/community/edit/:id",
       element: <EditPost data={posts} />,
+    },
+    {
+      path: "/opennote/community/comments/:id",
+      element: <Comments data={posts} />,
     },
     {
       path: "/opennote/community/editdraft/:id",

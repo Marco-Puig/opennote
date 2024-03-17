@@ -177,6 +177,9 @@ const Card = (props) => {
             ⭐ Feature
           </button>
         )}
+        <Link to={"/opennote/community/comments/:id" + props.id}>
+          <button className="likeButton"> 💬 Comments </button>
+        </Link>
         <button
           className="likeButton"
           onClick={() => downloadImage(props.canvas, props.audio)}
