@@ -657,10 +657,10 @@ const CreateAnimation = (props) => {
                     : post.canvases.length > 1
                     ? saved
                       ? "Saved!"
-                      : "Save Draft"
+                      : "Save Animation Draft"
                     : saved
                     ? "Saved!"
-                    : "Save Animation Draft"}
+                    : "Save Draft"}
                 </button>
               )}
             </div>
@@ -690,6 +690,7 @@ const CreateAnimation = (props) => {
               )}
             </div>
           </div>
+          <br />
           {gifUrl && showGifPreview && (
             <img
               src={gifUrl}
