@@ -9,6 +9,7 @@ const Comments = ({ data }) => {
   const [comment, setComment] = React.useState("");
   const [userData, setUserData] = React.useState(null);
   const [comments, setComments] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -22,6 +23,7 @@ const Comments = ({ data }) => {
       } else {
         setComments(data);
       }
+      setLoading(false);
     };
     fetchComments();
     fetchUserData();
@@ -40,6 +42,11 @@ const Comments = ({ data }) => {
   const createComment = async (event) => {
     event.preventDefault();
 
+    if (!userData) {
+      alert("Please sign in to comment");
+      return;
+    }
+
     await supabase.from("Comments").insert([
       {
         user_id: userData.id,
@@ -49,31 +56,41 @@ const Comments = ({ data }) => {
       },
     ]);
 
-    window.location = this;
+    window.location = "/opennote/community/comments/:id" + actualId;
   };
 
   return (
     <div className="EditPost">
-      <form onSubmit={createComment}>
-        <label>Comment</label>
-        <br />
-        <input
-          type="text"
-          required
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <br />
-        <button type="submit">Submit</button>
-      </form>
-      <div>
-        {comments.map((comments) => (
-          <div key={comments.id}>
-            <h3>{comments.username}</h3>
-            <h3>{comments.content}</h3>
+      {loading ? (
+        <h3>Loading...</h3>
+      ) : (
+        <>
+          <form onSubmit={createComment}>
+            <label>Comment</label>
+            <br />
+            <input
+              type="text"
+              required
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <br />
+            <button type="submit">Submit</button>
+          </form>
+          <div>
+            {comments[0] ? (
+              comments.map((comment) => (
+                <div key={comment.id} className="comment-box">
+                  <h3>{comment.username}</h3>
+                  <h3>{comment.content}</h3>
+                </div>
+              ))
+            ) : (
+              <h3>No comments... be the first!</h3>
+            )}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 };

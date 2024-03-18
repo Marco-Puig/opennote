@@ -73,3 +73,17 @@ input[type=submit]:hover {
 
     margin-bottom: 50px;
 }
+
+.comment-box {
+    margin-top: 20px;
+    width: 450px;
+    max-width: 450px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    border-color: aliceblue;
+    font-size: 20px;
+    font-family: inherit;
+    padding-left: 10px;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+}
