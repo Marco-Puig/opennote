@@ -6,12 +6,10 @@ import { supabase } from "./client";
 import ReadPosts from "./pages/ReadPosts";
 import ReadFeatures from "./pages/ReadFeatures";
 import CreateAnimation from "./pages/CreateAnimation";
-import EditPost from "./pages/EditPost";
 import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Drafts from "./pages/ReadDrafts";
-import EditDraft from "./pages/EditDraft";
 import Comments from "./pages/Comments";
 
 const App = () => {
