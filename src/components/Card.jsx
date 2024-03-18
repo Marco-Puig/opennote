@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import "./Card.css";
 import more from "./more.png";
 import { supabase } from "../client";
+import EditPost from "../pages/EditPost";
 
 const Card = (props) => {
   const [count, setCount] = useState(0);
   const [nameData, setNameData] = useState(null);
+  const [editing, setEditing] = useState(false);
   const audioRef = useRef(null);
   const gifRef = useRef(null);
 
@@ -138,56 +140,92 @@ const Card = (props) => {
     gifRef.current.src = currentSrc; // Reset the src to force reload
   };
 
+  const editPost = () => {
+    setEditing(true);
+  };
+
   return (
-    <div className="Card" onMouseEnter={playAudio} onMouseLeave={stopAudio}>
-      <div className="Card-header">
-        <div className="Header-edit-button">
-          <Link to={"/opennote/community/edit/:id" + props.id}>
-            {props.author_id === nameData && (
-              <img className="moreButton" alt="edit button" src={more} />
+    <>
+      {editing ? (
+        <div>
+          <div class="editing-header">
+            <h3>Editing Post...</h3>
+            <button onClick={() => setEditing(false)}>Cancel</button>
+          </div>
+          <EditPost
+            id={props.id}
+            title={props.title}
+            description={props.description}
+          ></EditPost>
+        </div>
+      ) : (
+        <div className="Card" onMouseEnter={playAudio} onMouseLeave={stopAudio}>
+          <div className="Card-header">
+            <div className="Header-edit-button">
+              {props.author_id === nameData && (
+                <button
+                  className="moreButton"
+                  alt="edit button"
+                  onClick={editPost}
+                  src={more}
+                  style={{
+                    backgroundImage: `url(${more})`,
+                    backgroundColor: "rgba(0, 0, 0, 0)",
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    width: "30px",
+                    height: "30px",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                ></button>
+              )}
+            </div>
+            <div className="Card-header-content">
+              <h2 className="title">{props.title}</h2>
+              {props.featured ? (
+                <h3 className="tag-featured">Featured</h3>
+              ) : null}
+              <h3 className="author">{"by " + props.author}</h3>
+              <h3 className="author">{"Posted: " + props.date.slice(0, 10)}</h3>
+              <p className="description">{props.description}</p>
+            </div>
+          </div>
+          <a href={props.canvas} target="_blank" rel="noopener noreferrer">
+            <img
+              ref={gifRef}
+              className="canvas"
+              width="400"
+              height="350"
+              src={props.canvas}
+              alt="canvas"
+              style={{ backgroundColor: "white" }}
+            />
+          </a>
+          <div className="Button-Area">
+            <button className="likeButton" onClick={toggleLike}>
+              👍 Likes: {props.likes + count}
+            </button>
+            {/* Allows Admins to feature a post */}
+            {nameData === "9407454f-2697-47f5-8c32-1c8095d50fbd" && (
+              <button className="likeButton" onClick={makeFeatured}>
+                ⭐ Feature
+              </button>
             )}
-          </Link>
+            <Link to={"/opennote/community/comments/:id" + props.id}>
+              <button className="likeButton"> 💬 Comments </button>
+            </Link>
+            <button
+              className="likeButton"
+              onClick={() => downloadImage(props.canvas, props.audio)}
+            >
+              💾 Save
+            </button>
+          </div>
         </div>
-        <div className="Card-header-content">
-          <h2 className="title">{props.title}</h2>
-          {props.featured ? <h3 className="tag-featured">Featured</h3> : null}
-          <h3 className="author">{"by " + props.author}</h3>
-          <h3 className="author">{"Posted: " + props.date.slice(0, 10)}</h3>
-          <p className="description">{props.description}</p>
-        </div>
-      </div>
-      <a href={props.canvas} target="_blank" rel="noopener noreferrer">
-        <img
-          ref={gifRef}
-          className="canvas"
-          width="400"
-          height="350"
-          src={props.canvas}
-          alt="canvas"
-          style={{ backgroundColor: "white" }}
-        />
-      </a>
-      <div className="Button-Area">
-        <button className="likeButton" onClick={toggleLike}>
-          👍 Likes: {props.likes + count}
-        </button>
-        {/* Allows Admins to feature a post */}
-        {nameData === "9407454f-2697-47f5-8c32-1c8095d50fbd" && (
-          <button className="likeButton" onClick={makeFeatured}>
-            ⭐ Feature
-          </button>
-        )}
-        <Link to={"/opennote/community/comments/:id" + props.id}>
-          <button className="likeButton"> 💬 Comments </button>
-        </Link>
-        <button
-          className="likeButton"
-          onClick={() => downloadImage(props.canvas, props.audio)}
-        >
-          💾 Save
-        </button>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

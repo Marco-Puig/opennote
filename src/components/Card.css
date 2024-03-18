@@ -147,3 +147,9 @@ p {
         opacity: 1;
     }
 }
+
+.editing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

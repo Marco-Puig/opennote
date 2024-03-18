@@ -49,16 +49,8 @@ const App = () => {
       element: <ReadPosts data={posts} />,
     },
     {
-      path: "/opennote/community/edit/:id",
-      element: <EditPost data={posts} />,
-    },
-    {
       path: "/opennote/community/comments/:id",
       element: <Comments data={posts} />,
-    },
-    {
-      path: "/opennote/community/editdraft/:id",
-      element: <EditDraft data={posts} />,
     },
     {
       path: "/opennote/new",

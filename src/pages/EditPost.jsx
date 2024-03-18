@@ -4,9 +4,7 @@ import { useParams } from "react-router-dom";
 import "./EditPost.css";
 import { supabase } from "../client";
 
-const EditPost = ({ data }) => {
-  const { id } = useParams();
-  const actualId = id.replace(":id", "");
+const EditPost = (props) => {
   const [post, setPost] = useState({
     id: null,
     title: "",
@@ -34,17 +32,17 @@ const EditPost = ({ data }) => {
         title: post.title,
         description: post.description,
       })
-      .eq("id", actualId);
+      .eq("id", props.id);
 
-    window.location = "/opennote/";
+    window.location = "/opennote/profile";
   };
 
   const deletePost = async (event) => {
     event.preventDefault();
 
-    await supabase.from("Posts").delete().eq("id", actualId);
+    await supabase.from("Posts").delete().eq("id", props.id);
 
-    window.location = "/opennote/";
+    window.location = "/opennote/profile";
   };
 
   return (
@@ -55,6 +53,7 @@ const EditPost = ({ data }) => {
           type="text"
           id="title"
           name="title"
+          placeholder={props.title}
           required
           value={post.title}
           onChange={handleChange}
@@ -67,6 +66,7 @@ const EditPost = ({ data }) => {
           cols="50"
           id="description"
           name="description"
+          placeholder={props.description}
           required
           value={post.description}
           onChange={handleChange}

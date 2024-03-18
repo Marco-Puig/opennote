@@ -4,14 +4,11 @@ import { useParams } from "react-router-dom";
 import "./EditPost.css";
 import { supabase } from "../client";
 
-const EditPost = ({ data }) => {
-  const { id } = useParams();
-  const actualId = id.replace(":id", "");
-
+const EditPost = (props) => {
   const deleteDraft = async (event) => {
     event.preventDefault();
 
-    await supabase.from("Drafts").delete().eq("id", actualId);
+    await supabase.from("Drafts").delete().eq("id", props.id);
 
     window.location = "/opennote/drafts";
   };
@@ -19,14 +16,9 @@ const EditPost = ({ data }) => {
   return (
     <div className="EditDraft">
       <form>
-        <label>Draft Settings</label>
-        <br />
         <button className="deleteButton" onClick={deleteDraft}>
           Delete Draft
         </button>
-        <Link to="/opennote/drafts">
-          <button className="backButton"> Back </button>
-        </Link>
       </form>
     </div>
   );
