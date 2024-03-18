@@ -85,8 +85,8 @@ const CreateAnimation = (props) => {
           const canvas = await createCanvasFromImage(imageUrl);
           // Assuming canvasRefs.current is an array of references to existing canvases
           if (canvasRefs.current[i]) {
-            canvasRefs.current[i].replaceWith(canvas); // Replace existing canvas with new one
-            canvasRefs.current[i] = canvas; // Update reference
+            const context = canvasRefs.current[i].getContext("2d");
+            context.drawImage(canvas, 0, 0);
           } else {
             // Handle case where canvasRefs.current[i] doesn't exist yet
             console.log("No existing canvas reference to replace");
