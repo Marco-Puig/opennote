@@ -39,7 +39,7 @@ const CreateAnimation = (props) => {
   const [saving, setSaving] = useState(false);
 
   const [saved, setSaved] = useState(false);
-
+  // eslint-disable-next-line
   const [loadedImages, setLoadedImages] = useState(false);
 
   const height = 595;
@@ -650,19 +650,17 @@ const CreateAnimation = (props) => {
                   Refresh Preview
                 </button>
               )}
-              {!loadedImages && (
-                <button onClick={uploadDraft} type="button">
-                  {saving
-                    ? "Saving..."
-                    : post.canvases.length > 1
-                    ? saved
-                      ? "Saved!"
-                      : "Save Animation Draft"
-                    : saved
+              <button onClick={uploadDraft} type="button">
+                {saving
+                  ? "Saving..."
+                  : post.canvases.length > 1
+                  ? saved
                     ? "Saved!"
-                    : "Save Draft"}
-                </button>
-              )}
+                    : "Save Animation Draft"
+                  : saved
+                  ? "Saved!"
+                  : "Save Draft"}
+              </button>
             </div>
             <div>
               <div>{showGifPreview && <label>Framerate Settings:</label>}</div>
