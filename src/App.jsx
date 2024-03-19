@@ -11,6 +11,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Drafts from "./pages/ReadDrafts";
 import Comments from "./pages/Comments";
+import Trending from "./pages/ReadTrending";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -41,6 +42,10 @@ const App = () => {
     {
       path: "/opennote",
       element: <ReadFeatures />,
+    },
+    {
+      path: "/opennote/trending",
+      element: <Trending />,
     },
     {
       path: "/opennote/community",
@@ -80,7 +85,7 @@ const App = () => {
           <Link to="/opennote">
             <button className="headerBtn"> Featured ⭐</button>
           </Link>
-          <Link to="/opennote">
+          <Link to="/opennote/trending">
             <button className="headerBtn"> Trending 📈 </button>
           </Link>
           <Link to="/opennote/community">
