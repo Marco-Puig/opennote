@@ -45,10 +45,13 @@ const DraftCard = (props) => {
         <div>
           {open && (
             <>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <h3 style={{ marginRight: "400px" }}>Editing Draft...</h3>
+                <button className="headerBtn" onClick={() => setOpen(false)}>
+                  Cancel
+                </button>
+              </div>
               <CreateAnimation images={props.images} />
-              <button className="headerBtn" onClick={() => setOpen(false)}>
-                Back
-              </button>
             </>
           )}
         </div>
