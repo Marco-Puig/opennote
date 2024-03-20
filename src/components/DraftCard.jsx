@@ -85,9 +85,18 @@ const DraftCard = (props) => {
                 {"Draft ID: " + props.date[20] + props.date[21]}
               </h2>
               <h3 className="author">{"by " + props.author}</h3>
-              <h3 className="author">{"Posted: " + props.date.slice(0, 10)}</h3>
-              <p className="description">{props.description}</p>
+              <h3 className="author">{"Saved: " + props.date.slice(0, 10)}</h3>
             </div>
+          </div>
+          <div>
+            <img
+              className="canvas"
+              width="400"
+              height="350"
+              src={props.images[0]}
+              alt="draft"
+              style={{ backgroundColor: "white" }}
+            />
           </div>
           <div className="Button-Area">
             <button className="likeButton" onClick={openDraft}>

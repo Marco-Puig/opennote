@@ -181,6 +181,26 @@ const Card = (props) => {
                   }}
                 ></button>
               )}
+              {/* If the post has audio, display the sound button */}
+              {props.audio && (
+                <div className="Header-sound-button">
+                  <button
+                    className="soundButton"
+                    alt="sound hover icon"
+                    /* src=sound handled in Card.css */
+                    style={{
+                      backgroundColor: "rgba(0, 0, 0, 0)",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      width: "30px",
+                      height: "30px",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  ></button>
+                </div>
+              )}
             </div>
             <div className="Card-header-content">
               <h2 className="title">{props.title}</h2>

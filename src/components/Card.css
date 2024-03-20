@@ -14,11 +14,17 @@
     flex-direction: column;
     align-items: center;
     transition: transform 0.3s ease;
+    .soundButton {
+        background-image: url('./muted_sound.png');
+    }
 }
 
 .Card:hover {
     transform: translateY(-10px);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    .soundButton {
+        background-image: url('./sound.png');
+    }
 }
 
 .Card-header {
@@ -28,13 +34,12 @@
     width: 500px;
 }
 
-.Card-header-content{
-    
+.Card-header-content {
     width: 700px;
     padding-right: 50px;
 }
 
-.Header-edit-button{
+.Header-edit-button {
     padding-top: 20px;
     width: 100px;
 }
@@ -152,4 +157,14 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.soundButton {
+    width: 30px;
+    align-self: right;
+    margin-bottom: 20px;
+}
+
+.soundButton:hover {
+    transform: scale(1.2);
 }

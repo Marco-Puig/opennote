@@ -123,6 +123,10 @@ const CreateAnimation = (props) => {
 
   const uploadDraft = async (event) => {
     event.preventDefault();
+    if (post.canvases.length < 1) {
+      alert("Please add at least one frame to save a draft.");
+      return;
+    }
     setSaved(false);
     setSaving(true);
 
