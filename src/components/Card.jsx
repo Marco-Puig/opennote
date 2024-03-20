@@ -27,7 +27,7 @@ const Card = (props) => {
   const toggleLike = async () => {
     // if user isnt logged in...
     if (!nameData) {
-      window.location.href = "/opennote/signin";
+      alert("You must be logged in to like a post.");
       return;
     }
 
