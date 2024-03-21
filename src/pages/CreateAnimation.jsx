@@ -109,7 +109,7 @@ const CreateAnimation = (props) => {
         authorId: user.id,
       }));
     } else {
-      window.location = "/opennote/signin";
+      window.location = "/signin";
     }
   };
 
@@ -333,7 +333,7 @@ const CreateAnimation = (props) => {
           canvas: publicGIFURL, // Save the public URL to the database for later retrieval
           author_id: post.authorId,
         });
-        window.location = "/opennote"; // Redirect to the home page after creating the post
+        window.location = "/"; // Redirect to the home page after creating the post
         return;
       }
 
@@ -360,7 +360,7 @@ const CreateAnimation = (props) => {
         audio: publicAudioURL,
       });
 
-      window.location = "/opennote"; // Redirect to the home page after creating the post
+      window.location = "/"; // Redirect to the home page after creating the post
     } catch (error) {
       console.error("Failed to create GIF or post:", error);
     }

@@ -32,7 +32,7 @@ const ReadDrafts = (props) => {
         setPosts(data);
       }
     } else {
-      window.location.href = "/opennote/signin";
+      window.location.href = "/signin";
     }
     setLoading(false);
   };

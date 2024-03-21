@@ -56,7 +56,7 @@ const Comments = ({ data }) => {
       },
     ]);
 
-    window.location = "/opennote/community/comments/:id" + actualId;
+    window.location = "/community/comments/:id" + actualId;
   };
 
   return (

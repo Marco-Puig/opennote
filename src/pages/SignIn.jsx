@@ -10,7 +10,7 @@ function SignIn() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // If user is already logged in, redirect to /opennote
+    // If user is already logged in, redirect to main page
     fetchUserData();
   });
 
@@ -21,7 +21,7 @@ function SignIn() {
     if (user) setUserData(user.id);
 
     if (userData) {
-      window.location.href = "/opennote";
+      window.location.href = "/";
     }
   };
 
@@ -39,7 +39,7 @@ function SignIn() {
       console.error("Error signing in:", error.message);
       setError(error.message);
     } else {
-      window.location.href = "/opennote";
+      window.location.href = "/";
     }
 
     setLoading(false);
@@ -73,7 +73,7 @@ function SignIn() {
         <button type="submit" disabled={loading}>
           {loading ? "Signing in..." : "Sign in"}
         </button>
-        <Link to="/opennote/signup">
+        <Link to="/signup">
           <button type="submit">Sign up</button>
         </Link>
       </form>

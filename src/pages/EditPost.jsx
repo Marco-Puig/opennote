@@ -33,7 +33,7 @@ const EditPost = (props) => {
       })
       .eq("id", props.id);
 
-    window.location = "/opennote/profile";
+    window.location = "/profile";
   };
 
   const deletePost = async (event) => {
@@ -41,7 +41,7 @@ const EditPost = (props) => {
 
     await supabase.from("Posts").delete().eq("id", props.id);
 
-    window.location = "/opennote/profile";
+    window.location = "/profile";
   };
 
   return (

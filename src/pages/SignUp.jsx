@@ -10,7 +10,7 @@ function SignUp() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // If user is already logged in, redirect to /opennote
+    // If user is already logged in, redirect to main page
     fetchUserData();
   });
 
@@ -21,7 +21,7 @@ function SignUp() {
     setUserData(user.id);
 
     if (userData) {
-      window.location.href = "/opennote";
+      window.location.href = "/";
     }
   };
 
@@ -44,7 +44,7 @@ function SignUp() {
       console.error("Error signing up:", error.message);
       setError(error.message);
     } else {
-      window.location.href = "/opennote";
+      window.location.href = "/";
     }
 
     setLoading(false);

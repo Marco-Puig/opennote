@@ -40,39 +40,39 @@ const App = () => {
   // Sets up routes
   let element = useRoutes([
     {
-      path: "/opennote",
+      path: "/",
       element: <ReadFeatures />,
     },
     {
-      path: "/opennote/trending",
+      path: "/trending",
       element: <Trending />,
     },
     {
-      path: "/opennote/community",
+      path: "/community",
       element: <ReadPosts data={posts} />,
     },
     {
-      path: "/opennote/community/comments/:id",
+      path: "/community/comments/:id",
       element: <Comments data={posts} />,
     },
     {
-      path: "/opennote/new",
+      path: "/new",
       element: <CreateAnimation />,
     },
     {
-      path: "/opennote/signin",
+      path: "/signin",
       element: <SignIn />,
     },
     {
-      path: "/opennote/signup",
+      path: "/signup",
       element: <SignUp />,
     },
     {
-      path: "/opennote/profile",
+      path: "/profile",
       element: <Profile data={posts} />,
     },
     {
-      path: "/opennote/drafts",
+      path: "/drafts",
       element: <Drafts data={posts} />,
     },
   ]);
@@ -82,34 +82,34 @@ const App = () => {
       <div className="header">
         <h1>OpenNote 📝</h1>
         <div className="nav_links">
-          <Link to="/opennote">
+          <Link to="">
             <button className="headerBtn"> Featured ⭐</button>
           </Link>
-          <Link to="/opennote/trending">
+          <Link to="/trending">
             <button className="headerBtn"> Trending 📈 </button>
           </Link>
-          <Link to="/opennote/community">
+          <Link to="/community">
             <button className="headerBtn"> Community 🌐 </button>
           </Link>
 
           {userData ? (
-            <Link to="/opennote/new">
+            <Link to="/new">
               <button className="headerBtn"> Create Post ✍️ </button>
             </Link>
           ) : (
-            <Link to="/opennote/signin">
+            <Link to="/signin">
               <button className="headerBtn"> Create Post ✍️ </button>
             </Link>
           )}
           {userData ? (
             <>
-              <Link to="/opennote/drafts">
+              <Link to="/drafts">
                 <button className="headerBtn"> Drafts 📝 </button>
               </Link>
-              <Link to="/opennote/profile">
+              <Link to="/profile">
                 <button className="headerBtn"> Profile 👤 </button>
               </Link>
-              <Link to="/opennote">
+              <Link to="">
                 <button className="headerBtn" onClick={handleSignout}>
                   Sign Out 🔴
                 </button>
@@ -117,7 +117,7 @@ const App = () => {
             </>
           ) : (
             <>
-              <Link to="/opennote/signin">
+              <Link to="/signin">
                 <button className="headerBtn"> Sign In 🔘 </button>
               </Link>
             </>
