@@ -233,7 +233,7 @@ const Card = (props) => {
                 ⭐ Feature
               </button>
             )}
-            <Link to={"/opennote/community/comments/:id" + props.id}>
+            <Link to={"/community/comments/:id" + props.id}>
               <button className="likeButton"> 💬 Comments </button>
             </Link>
             <button
