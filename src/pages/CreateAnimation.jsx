@@ -458,7 +458,7 @@ const CreateAnimation = (props) => {
           event.preventDefault(); // Prevent default to avoid any unwanted behavior
         });
 
-        canvas.addEventListener("mousemove", (event) => {
+        canvas.addEventListener("pointermove", (event) => {
           if (isDrawing) {
             const rect = canvas.getBoundingClientRect();
             const offsetX = event.clientX - 5 - rect.left;
