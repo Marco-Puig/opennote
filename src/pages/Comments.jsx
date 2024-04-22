@@ -84,11 +84,6 @@ const Comments = ({ data }) => {
             <h4>{postData[0] ? "Post Title: " + postData[0].title : ""}</h4>
             <h4>{postData[0] ? "Post Author: " + postData[0].author : ""}</h4>
             <h4>
-              {postData[0].description === " "
-                ? "Post Description: " + postData[0].description
-                : ""}
-            </h4>
-            <h4>
               {postData[0]
                 ? "Post Time: " + postData[0].created_at.slice(11)
                 : ""}
