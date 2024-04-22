@@ -68,7 +68,7 @@ button:hover {
   font-size: 35px;
 }
 
-@media (max-width: 1370px) {
+@media (max-width: 1490px) {
   .header {
     flex-direction: column;
     height: auto;
