@@ -91,7 +91,7 @@ const App = () => {
             <button className="headerBtn"> Featured ⭐</button>
           </Link>
           <Link to="/trending">
-            <button className="headerBtn"> Trending 📈 </button>
+            <button className="headerBtn"> Top Liked 📈 </button>
           </Link>
           <Link to="/community">
             <button className="headerBtn"> Community 🌐 </button>

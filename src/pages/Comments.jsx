@@ -10,6 +10,7 @@ const Comments = ({ data }) => {
   const [userData, setUserData] = React.useState(null);
   const [comments, setComments] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [postData, setPostData] = React.useState([]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -27,6 +28,19 @@ const Comments = ({ data }) => {
     };
     fetchComments();
     fetchUserData();
+    const fetchPostData = async () => {
+      const { data, error } = await supabase
+        .from("Posts")
+        .select("*")
+        .eq("id", actualId);
+
+      if (error) {
+        console.log("error", error);
+      } else {
+        setPostData(data);
+      }
+    };
+    fetchPostData();
   }, [actualId]);
 
   const fetchUserData = async () => {
@@ -65,6 +79,21 @@ const Comments = ({ data }) => {
         <h3>Loading...</h3>
       ) : (
         <>
+          <div className="post-info">
+            <label>Post Info</label>
+            <h4>{postData[0] ? "Post Title: " + postData[0].title : ""}</h4>
+            <h4>{postData[0] ? "Post Author: " + postData[0].author : ""}</h4>
+            <h4>
+              {postData[0].description === " "
+                ? "Post Description: " + postData[0].description
+                : ""}
+            </h4>
+            <h4>
+              {postData[0]
+                ? "Post Time: " + postData[0].created_at.slice(11)
+                : ""}
+            </h4>
+          </div>
           <form onSubmit={createComment}>
             <label>Comment</label>
             <br />
@@ -73,11 +102,12 @@ const Comments = ({ data }) => {
               required
               value={comment}
               onChange={(e) => setComment(e.target.value)}
+              className="comment-input"
             />
             <br />
-            <button type="submit">Submit</button>
+            <button type="submit">Post</button>
           </form>
-          <div>
+          <div className="comments">
             {comments[0] ? (
               comments.map((comment) => (
                 <div key={comment.id} className="comment-box">

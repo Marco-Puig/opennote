@@ -44,6 +44,9 @@ function SignUp() {
       console.error("Error signing up:", error.message);
       setError(error.message);
     } else {
+      alert(
+        "Please check your email to verify your account before logging in!"
+      );
       window.location.href = "/";
     }
 
