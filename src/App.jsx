@@ -12,6 +12,7 @@ import SignUp from "./pages/SignUp";
 import Drafts from "./pages/ReadDrafts";
 import Comments from "./pages/Comments";
 import Trending from "./pages/ReadTrending";
+import Search from "./pages/Search";
 
 const App = () => {
   const [userData, setUserData] = useState(null);
@@ -75,6 +76,10 @@ const App = () => {
       path: "/drafts",
       element: <Drafts data={posts} />,
     },
+    {
+      path: "/search",
+      element: <Search data={posts} />,
+    },
   ]);
 
   return (
@@ -91,7 +96,9 @@ const App = () => {
           <Link to="/community">
             <button className="headerBtn"> Community 🌐 </button>
           </Link>
-
+          <Link to="/search">
+            <button className="headerBtn"> Search 🔍 </button>
+          </Link>
           {userData ? (
             <Link to="/new">
               <button className="headerBtn"> Create Post ✍️ </button>
