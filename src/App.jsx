@@ -129,9 +129,9 @@ const App = () => {
               </Link>
             </>
           )}
-          <a href="https://ko-fi.com/marcopuig">
+          {/*<a href="https://ko-fi.com/marcopuig">
             <button className="headerBtn"> Donate ❤️</button>
-          </a>
+          </a> */}
         </div>
       </div>
       {element}
