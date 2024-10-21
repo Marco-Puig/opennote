@@ -7,7 +7,7 @@ OpenNote is a modern version of Flipnote, bring back the fun and classic animati
 ![Capture](https://github.com/Marco-Puig/opennote/assets/90495366/00ef8634-b0c7-42db-aee9-0435dd4dffc9)
 
 ### Overview
-https://www.youtube.com/watch?v=HuUSYCK0Fuo
+[https://opennote.pages.dev/](https://opennote.pages.dev/)
 
 ## Get Started
 
