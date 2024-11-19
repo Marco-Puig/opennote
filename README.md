@@ -4,7 +4,7 @@ OpenNote is a modern version of Flipnote, bring back the fun and classic animati
 
 ## Preview
 ### March 7th 2024
-![prev](https://github.com/user-attachments/assets/572abdbe-7034-42c8-b950-add749a9e590)
+![prev](https://github.com/user-attachments/assets/34b9bf43-4a6e-42ee-a971-8eb977b22ff7)
 
 ### Website
 [https://opennote.pages.dev/](https://opennote.pages.dev/)
