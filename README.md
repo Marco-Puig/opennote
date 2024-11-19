@@ -2,9 +2,9 @@
 
 OpenNote is a modern version of Flipnote, bring back the fun and classic animation tool with new features. This user-friendly interface allows anyone to express themselves by creating their own pieces, or by sharing their creations online!
 
-## Screenshot
+## Preview
 ### March 7th 2024
-![Capture](https://github.com/Marco-Puig/opennote/assets/90495366/00ef8634-b0c7-42db-aee9-0435dd4dffc9)
+![prev](https://github.com/user-attachments/assets/572abdbe-7034-42c8-b950-add749a9e590)
 
 ### Website
 [https://opennote.pages.dev/](https://opennote.pages.dev/)
