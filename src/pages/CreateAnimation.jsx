@@ -132,7 +132,7 @@ const CreateAnimation = (props) => {
 
     try {
       const canvasDataUrls = canvasRefs.current.map((canvas) =>
-        canvas.toDataURL()
+        canvas.toDataURL(),
       );
 
       await supabase.from("Drafts").insert({
@@ -180,7 +180,7 @@ const CreateAnimation = (props) => {
           0,
           0,
           canvas.width,
-          canvas.height
+          canvas.height,
         );
         setRedoStack((prevRedoStack) => [...prevRedoStack, currentState]);
 
@@ -211,7 +211,7 @@ const CreateAnimation = (props) => {
           0,
           0,
           canvas.width,
-          canvas.height
+          canvas.height,
         );
         setUndoStack((prevUndoStack) => [...prevUndoStack, currentState]);
 
@@ -320,7 +320,7 @@ const CreateAnimation = (props) => {
       }
 
       // Get the public URL of the uploaded file
-      const publicGIFURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/animations/${fileGIFName}`;
+      const publicGIFURL = `https://lyjszfmmjvpqcpaatgzp.supabase.co/storage/v1/object/public/animations/${fileGIFName}`;
 
       //update the post object with the public URL of the audio
       // Upload the audio file if it exists and is within the size limit
@@ -348,7 +348,7 @@ const CreateAnimation = (props) => {
         throw uploadAudioError;
       }
       // Construct the public URL for the uploaded audio
-      const publicAudioURL = `https://dsmzsdwcqosymcyvemmn.supabase.co/storage/v1/object/public/audio/${fileAudioName}`;
+      const publicAudioURL = `https://lyjszfmmjvpqcpaatgzp.supabase.co/storage/v1/object/public/audio/${fileAudioName}`;
 
       // Save the post details along with the public URL of the GIF in the database
       await supabase.from("Posts").insert({
@@ -438,7 +438,7 @@ const CreateAnimation = (props) => {
               0,
               0,
               canvas.width,
-              canvas.height
+              canvas.height,
             );
             return [...prevUndoStack, imageData];
           });
@@ -475,7 +475,7 @@ const CreateAnimation = (props) => {
         });
 
         canvas.addEventListener("contextmenu", (event) =>
-          event.preventDefault()
+          event.preventDefault(),
         );
       }
     });
@@ -492,7 +492,7 @@ const CreateAnimation = (props) => {
           canvas.removeEventListener("mousemove", draw);
           window.removeEventListener("mouseup", stopDrawing);
           canvas.removeEventListener("contextmenu", (event) =>
-            event.preventDefault()
+            event.preventDefault(),
           );
         }
       });
@@ -658,12 +658,12 @@ const CreateAnimation = (props) => {
                 {saving
                   ? "Saving..."
                   : post.canvases.length > 1
-                  ? saved
-                    ? "Saved!"
-                    : "Save Animation Draft"
-                  : saved
-                  ? "Saved!"
-                  : "Save Draft"}
+                    ? saved
+                      ? "Saved!"
+                      : "Save Animation Draft"
+                    : saved
+                      ? "Saved!"
+                      : "Save Draft"}
               </button>
             </div>
             <div>
@@ -717,8 +717,8 @@ const CreateAnimation = (props) => {
               loading
                 ? "Uploading..."
                 : post.canvases.length > 1
-                ? "Post Animation"
-                : "Create Post"
+                  ? "Post Animation"
+                  : "Create Post"
             }
           />
         </div>
